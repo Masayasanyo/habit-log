@@ -13,6 +13,8 @@ import {
 import { items } from "@/lib/sidebar/menu-items";
 
 export function AppSidebar() {
+  const currentYear = new Date().getFullYear();
+
   return (
     <Sidebar>
       <SidebarHeader>
@@ -37,7 +39,11 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter>
+        <small>
+          &copy; <span id="year">{currentYear}</span> Habit Log
+        </small>
+      </SidebarFooter>
     </Sidebar>
   );
 }
