@@ -25,6 +25,7 @@
         "noUnusedVariables": "error",
         "noUnusedImports": "error"
       },
+      "style": "off",
       "nursery": { "useSortedClasses": "warn" }
     },
     "domains": {
