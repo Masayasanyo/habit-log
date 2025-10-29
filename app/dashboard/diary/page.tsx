@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
+import { DiaryForm } from "@/components/containers/diary/diary-form";
 
 export const metadata: Metadata = {
-  title: "ホーム",
+  title: "日記",
 };
 
 export default function Page() {
   return (
     <div className="">
-      <h1>Home page</h1>
+      <DiaryForm />
     </div>
   );
 }
