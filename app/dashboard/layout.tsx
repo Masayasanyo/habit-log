@@ -6,9 +6,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset>
+      <SidebarInset className="h-100vh">
         <SiteHeader />
-        <main>{children}</main>
+        <main className="p-4">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );
