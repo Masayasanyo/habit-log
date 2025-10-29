@@ -6,8 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "format": "biome format --write ./",
-    "format:unsafe": "biome lint --write --unsafe ./"
+    "format": "npx @biomejs/biome format --write ./",
+    "lint": "npx @biomejs/biome lint ./",
+    "check": "npx @biomejs/biome check --write ./"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
