@@ -1,18 +1,22 @@
+import { logout } from "@/actions/user-actions";
+import { Button } from "@/components/ui/button";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarHeader,
-  SidebarGroupLabel,
   SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
-  SidebarMenuItem,
   SidebarMenuButton,
+  SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { items } from "@/lib/sidebar/menu-items";
 
 export function AppSidebar() {
+  const currentYear = new Date().getFullYear();
+
   return (
     <Sidebar>
       <SidebarHeader>
@@ -37,7 +41,16 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter>
+        <form action={logout} className="">
+          <Button variant="ghost" type="submit" className="w-full justify-start">
+            <div className="font-bold">ログアウト</div>
+          </Button>
+        </form>
+        <small>
+          &copy; <span id="year">{currentYear}</span> Habit Log
+        </small>
+      </SidebarFooter>
     </Sidebar>
   );
 }

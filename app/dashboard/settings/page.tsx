@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "ホーム",
+  title: "設定",
 };
 
 export default function Page() {
   return (
     <div className="">
-      <h1>Home page</h1>
+      <p>設定ページ</p>
     </div>
   );
 }

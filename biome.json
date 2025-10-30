@@ -25,11 +25,20 @@
         "noUnusedVariables": "error",
         "noUnusedImports": "error"
       },
+      "style": "off",
       "nursery": { "useSortedClasses": "warn" }
     },
     "domains": {
       "next": "recommended",
       "react": "recommended"
+    }
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
     }
   },
   "javascript": {
@@ -45,14 +54,6 @@
       "indentStyle": "space",
       "indentWidth": 2,
       "lineWidth": 100
-    }
-  },
-  "assist": {
-    "enabled": true,
-    "actions": {
-      "source": {
-        "organizeImports": "on"
-      }
     }
   },
   "css": {

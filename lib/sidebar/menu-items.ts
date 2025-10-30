@@ -13,7 +13,7 @@ export const items = [
     icon: NotebookPen,
   },
   {
-    title: "Settings",
+    title: "設定",
     url: "/dashboard/settings",
     icon: Settings,
   },
