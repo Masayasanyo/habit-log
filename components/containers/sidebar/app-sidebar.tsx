@@ -1,55 +1,41 @@
-import { logout } from "@/actions/user-actions";
-import { Button } from "@/components/ui/button";
+"use client";
+
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { items } from "@/lib/sidebar/menu-items";
+import { IconNotebook } from "@tabler/icons-react";
+import { NavMain } from "./nav-main";
+import { NavSecondary } from "./nav-secondary";
+import { NavUser } from "./nav-user";
 
-export function AppSidebar() {
-  const currentYear = new Date().getFullYear();
-
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar>
+    <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
-        <h1>Habit Log</h1>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
+              <a href="/dashboard">
+                <IconNotebook className="!size-5" />
+                <span className="font-semibold text-base">Habit Log</span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel></SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        <NavMain items={items.navMain} />
+        <NavSecondary items={items.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <form action={logout} className="">
-          <Button variant="ghost" type="submit" className="w-full justify-start">
-            <div className="font-bold">ログアウト</div>
-          </Button>
-        </form>
-        <small>
-          &copy; <span id="year">{currentYear}</span> Habit Log
-        </small>
+        <NavUser user={items.user} />
       </SidebarFooter>
     </Sidebar>
   );
