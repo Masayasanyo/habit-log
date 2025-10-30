@@ -33,7 +33,7 @@ export function DiaryForm() {
             <div className="grid gap-2">
               <Label htmlFor="done">今日したこと</Label>
               <Textarea
-                className="h-20 overflow-y-auto"
+                className="h-20 resize-none overflow-y-auto"
                 id="done"
                 placeholder="今日取り組んだことを入力してください"
                 required
@@ -42,7 +42,7 @@ export function DiaryForm() {
             <div className="grid gap-2">
               <Label htmlFor="learned">学んだこと</Label>
               <Textarea
-                className="h-20 overflow-y-auto"
+                className="h-20 resize-none overflow-y-auto"
                 id="learned"
                 placeholder="今日学んだことを入力してください"
                 required
@@ -51,7 +51,7 @@ export function DiaryForm() {
             <div className="grid gap-2">
               <Label htmlFor="challenge">明日への課題</Label>
               <Textarea
-                className="h-20 overflow-y-auto"
+                className="h-20 resize-none overflow-y-auto"
                 id="challenge"
                 placeholder="明日への課題を入力してください"
                 required
@@ -60,7 +60,7 @@ export function DiaryForm() {
             <div className="grid gap-2">
               <Label htmlFor="other">その他</Label>
               <Textarea
-                className="h-20 overflow-y-auto"
+                className="h-20 resize-none overflow-y-auto"
                 id="other"
                 placeholder="その他自由に入力してください"
               />
