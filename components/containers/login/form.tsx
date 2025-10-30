@@ -1,5 +1,9 @@
 "use client";
 
+import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useActionState } from "react";
 import { authenticate } from "@/actions/user-actions";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,10 +17,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useActionState } from "react";
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
@@ -43,7 +43,7 @@ export default function LoginForm() {
           <div className="flex flex-col gap-6">
             <div className="grid gap-2">
               <Label htmlFor="email">メールアドレス</Label>
-              <Input id="email" type="email" placeholder="m@example.com" required />
+              <Input id="email" name="email" type="email" placeholder="m@example.com" required />
             </div>
             <div className="grid gap-2">
               <div className="flex items-center">
@@ -55,7 +55,7 @@ export default function LoginForm() {
                   パスワードを忘れた場合
                 </a>
               </div>
-              <Input id="password" type="password" required />
+              <Input id="password" name="password" type="password" required />
             </div>
           </div>
           <input type="hidden" name="redirectTo" value={callbackUrl} />

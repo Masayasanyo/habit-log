@@ -1,3 +1,5 @@
+import { logout } from "@/actions/user-actions";
+import { Button } from "@/components/ui/button";
 import {
   Sidebar,
   SidebarContent,
@@ -40,6 +42,11 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
+        <form action={logout} className="">
+          <Button variant="ghost" type="submit" className="w-full justify-start">
+            <div className="font-bold">ログアウト</div>
+          </Button>
+        </form>
         <small>
           &copy; <span id="year">{currentYear}</span> Habit Log
         </small>

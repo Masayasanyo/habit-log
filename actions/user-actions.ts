@@ -9,10 +9,10 @@ import type { RegisterState } from "@/types/errors/register";
 
 export async function register(_prevState: RegisterState | undefined, formData: FormData) {
   const validatedFields = RegisterFormSchema.safeParse({
-    name: formData.get("name"),
+    username: formData.get("username"),
     email: formData.get("email"),
     password: formData.get("password"),
-    confirmedPassword: formData.get("confirmedPassword"),
+    confirmedPassword: formData.get("confirmed-password"),
   });
 
   if (!validatedFields.success) {
@@ -22,16 +22,15 @@ export async function register(_prevState: RegisterState | undefined, formData: 
     };
   }
 
-  const { name, email, password } = validatedFields.data;
+  const { username, email, password } = validatedFields.data;
 
   const saltRounds = 10;
   const hashedPassword = await bcrypt.hash(password, saltRounds);
 
   const { error } = await supabase
     .from("users")
-    .insert({ name: name, email: email, password: hashedPassword });
+    .insert({ username: username, email: email, password: hashedPassword });
   if (error) {
-    console.log(error.code);
     if (error.code === "23505") {
       return {
         message: "このメールアドレスはすでに使用されています。",
