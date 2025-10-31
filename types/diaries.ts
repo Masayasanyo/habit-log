@@ -1,11 +1,11 @@
 export interface Diary {
-  id: number;
-  userId: number;
-  dateStr: string;
+  id: number | null;
+  userId: number | null;
   done: string;
   learned: string;
   challenge: string;
   other: string;
+  date: string;
 }
 
 export interface DiaryState {

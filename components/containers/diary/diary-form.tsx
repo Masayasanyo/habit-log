@@ -1,6 +1,6 @@
 "use client";
 
-import { create } from "@/actions/diaries-actions";
+import { create, getTodayDiary } from "@/actions/diaries-actions";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,11 +15,38 @@ import {
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { getDateWithDayOfWeek } from "@/lib/date/date";
+import { Diary } from "@/types/diaries";
 import { AlertCircleIcon } from "lucide-react";
-import { useActionState } from "react";
+import { useActionState, useEffect, useState } from "react";
 
 export function DiaryForm() {
   const [state, formAction, isPending] = useActionState(create, undefined);
+  const [diary, setDiary] = useState<Diary>({
+    id: null,
+    userId: null,
+    done: "",
+    learned: "",
+    challenge: "",
+    other: "",
+    date: "",
+  });
+
+  useEffect(() => {
+    async function fetchTodayDiary() {
+      const result = await getTodayDiary();
+      setDiary((prev) => ({
+        ...prev,
+        id: result?.id,
+        userId: result?.userId,
+        done: result?.done,
+        learned: result?.learned,
+        challenge: result?.challenge,
+        other: result?.other,
+        date: result?.date,
+      }));
+    }
+    fetchTodayDiary();
+  }, []);
 
   return (
     <Card className="max-h-xl w-full max-w-xl">
@@ -42,6 +69,8 @@ export function DiaryForm() {
                 id="done"
                 name="done"
                 placeholder="今日取り組んだことを入力してください"
+                value={diary.done}
+                onChange={(e) => setDiary((prev) => ({ ...prev, done: e.target.value }))}
                 required
               />
               <div aria-live="polite" aria-atomic="true">
@@ -59,6 +88,8 @@ export function DiaryForm() {
                 id="learned"
                 name="learned"
                 placeholder="今日学んだことを入力してください"
+                value={diary.learned}
+                onChange={(e) => setDiary((prev) => ({ ...prev, learned: e.target.value }))}
                 required
               />
               <div aria-live="polite" aria-atomic="true">
@@ -76,6 +107,8 @@ export function DiaryForm() {
                 id="challenge"
                 name="challenge"
                 placeholder="明日への課題を入力してください"
+                value={diary.challenge}
+                onChange={(e) => setDiary((prev) => ({ ...prev, challenge: e.target.value }))}
                 required
               />
               <div aria-live="polite" aria-atomic="true">
@@ -93,6 +126,8 @@ export function DiaryForm() {
                 id="other"
                 name="other"
                 placeholder="その他自由に入力してください"
+                value={diary.other}
+                onChange={(e) => setDiary((prev) => ({ ...prev, other: e.target.value }))}
               />
               <div aria-live="polite" aria-atomic="true">
                 {state?.errors?.other?.map((error: string) => (
