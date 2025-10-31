@@ -1,6 +1,7 @@
 "use server";
 
 import { getUserId } from "@/actions/user-actions";
+import { getDate } from "@/lib/date/date";
 import { DiaryFormSchema } from "@/lib/schemas/diary-form";
 import { supabase } from "@/lib/supabase";
 import type { DiaryState } from "@/types/diaries";
@@ -25,6 +26,7 @@ export async function create(_prevState: DiaryState | undefined, formData: FormD
 
     const { done, learned, challenge, other } = validatedFields.data;
     const userId = await getUserId();
+    const date = getDate();
 
     const { error: DatabaseError } = await supabase.from("diaries").insert({
       user_id: userId,
@@ -32,6 +34,7 @@ export async function create(_prevState: DiaryState | undefined, formData: FormD
       learned: learned,
       challenge: challenge,
       other: other,
+      date: date,
     });
 
     if (DatabaseError) {

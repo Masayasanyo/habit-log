@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { GetTodayDate } from "@/lib/date/date";
+import { getDateWithDayOfWeek } from "@/lib/date/date";
 import { AlertCircleIcon } from "lucide-react";
 import { useActionState } from "react";
 
@@ -29,7 +29,7 @@ export function DiaryForm() {
           振り返りの時間。今日の出来事と学びを記録し、明日への糧にしましょう。
         </CardDescription>
         <CardAction>
-          <p>{GetTodayDate()}</p>
+          <p>{getDateWithDayOfWeek()}</p>
         </CardAction>
       </CardHeader>
       <CardContent className="scrollable">
