@@ -16,7 +16,7 @@ import { GetTodayDate } from "@/lib/date/date";
 
 export function DiaryForm() {
   return (
-    <Card className="h-180 w-full max-w-sm">
+    <Card className="h-180 w-full max-w-xl">
       <CardHeader>
         <CardTitle>今日の日記</CardTitle>
         <CardDescription>
