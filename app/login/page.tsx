@@ -1,9 +1,12 @@
 import LoginForm from "@/components/containers/login/form";
+import { Suspense } from "react";
 
 export default function Page() {
   return (
     <div>
-      <LoginForm />
+      <Suspense>
+        <LoginForm />
+      </Suspense>
     </div>
   );
 }
