@@ -5,7 +5,7 @@ import { AuthError } from "next-auth";
 import { signIn, signOut, auth } from "@/auth";
 import { RegisterFormSchema } from "@/lib/schemas/register-form";
 import { supabase } from "@/lib/supabase";
-import type { RegisterState } from "@/types/errors/register";
+import type { RegisterState } from "@/types/user";
 
 export async function getUserId() {
   const session = await auth();
