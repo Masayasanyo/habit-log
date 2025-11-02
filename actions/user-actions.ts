@@ -2,10 +2,18 @@
 
 import bcrypt from "bcryptjs";
 import { AuthError } from "next-auth";
-import { signIn, signOut } from "@/auth";
+import { signIn, signOut, auth } from "@/auth";
 import { RegisterFormSchema } from "@/lib/schemas/register-form";
 import { supabase } from "@/lib/supabase";
 import type { RegisterState } from "@/types/errors/register";
+
+export async function getUserId() {
+  const session = await auth();
+  const userIdString: string = session?.user?.id as string;
+  const userId = Number(userIdString);
+
+  return userId;
+}
 
 export async function register(_prevState: RegisterState | undefined, formData: FormData) {
   const validatedFields = RegisterFormSchema.safeParse({
