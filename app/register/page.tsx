@@ -1,9 +1,12 @@
 import RegisterForm from "@/components/containers/register/form";
+import { Suspense } from 'react';
 
 export default function Page() {
   return (
     <div className="">
-      <RegisterForm />
+      <Suspense>
+        <RegisterForm />
+      </Suspense>
     </div>
   );
 }
