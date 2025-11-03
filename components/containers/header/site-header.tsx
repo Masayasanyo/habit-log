@@ -1,13 +1,13 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { pageTitles } from "@/lib/header/page-titles";
+import { usePathname } from "next/navigation";
 
 export function SiteHeader() {
   const pathName = usePathname();
-  const title = pageTitles[pathName] ?? "";
+  const title = pageTitles[pathName.split("/")[2] || "home"] ?? "";
 
   return (
     <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">

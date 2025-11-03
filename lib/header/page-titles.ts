@@ -1,8 +1,9 @@
 export const pageTitles: Record<string, string> = {
-  "/dashboard": "ホーム",
-  "/dashboard/diary": "日記",
-  "/dashboard/habit": "習慣",
-  "/dashboard/negative": "ネガティブ管理",
-  "/dashboard/goal": "目標",
-  "/dashboard/community": "コミュニティ",
+  home: "ホーム",
+  diary: "日記",
+  habit: "習慣",
+  negative: "ネガティブ管理",
+  goal: "目標",
+  community: "コミュニティ",
+  settings: "設定",
 };
