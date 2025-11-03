@@ -1,7 +1,6 @@
 "use server";
 
 import { getUserId } from "@/actions/user-actions";
-import { getDate } from "@/lib/date/date";
 import { DiaryFormSchema } from "@/lib/schemas/diary-form";
 import { supabase } from "@/lib/supabase";
 import type { DiaryState } from "@/types/diaries";
@@ -13,20 +12,18 @@ export async function create(_prevState: DiaryState | undefined, formData: FormD
       learned: formData.get("learned"),
       challenge: formData.get("challenge"),
       other: formData.get("other"),
+      date: formData.get("date"),
     });
 
     if (!validatedFields.success) {
-      console.log("Validation errors:", validatedFields.error.flatten().fieldErrors);
-
       return {
         errors: validatedFields.error.flatten().fieldErrors,
         message: "日記の保存に失敗しました。",
       };
     }
 
-    const { done, learned, challenge, other } = validatedFields.data;
+    const { done, learned, challenge, other, date } = validatedFields.data;
     const userId = await getUserId();
-    const date = getDate();
 
     const { error: DatabaseError } = await supabase.from("diaries").upsert(
       {
@@ -53,10 +50,9 @@ export async function create(_prevState: DiaryState | undefined, formData: FormD
   }
 }
 
-export async function getTodayDiary() {
+export async function fetchDiary(date: string) {
   try {
     const userId = await getUserId();
-    const date = getDate();
 
     const { data, error: DatabaseError } = await supabase
       .from("diaries")
@@ -68,10 +64,55 @@ export async function getTodayDiary() {
       console.error("Database Error:", DatabaseError);
       throw new Error("日記の取得に失敗しました。");
     }
+    if (data.length === 0) {
+      return null;
+    }
     return data[0];
   } catch (_error) {
-    return {
-      message: "予期せぬエラーが発生しました。",
-    };
+    throw new Error("予期せぬエラーが発生しました。");
+  }
+}
+
+export async function fetchDiaries(startDate: string, endDate: string) {
+  try {
+    const userId = await getUserId();
+
+    const { data, error: DatabaseError } = await supabase
+      .from("diaries")
+      .select()
+      .eq("user_id", userId)
+      .gte("date", startDate)
+      .lte("date", endDate)
+      .order("date", { ascending: false });
+
+    if (DatabaseError) {
+      console.error("Database Error:", DatabaseError);
+      throw new Error("日記の取得に失敗しました。");
+    }
+    if (!data || data.length === 0) {
+      return [];
+    }
+    return data;
+  } catch (_error) {
+    throw new Error("予期せぬエラーが発生しました。");
+  }
+}
+
+export async function deleteDiary(date: string) {
+  try {
+    const userId = await getUserId();
+
+    const { error: DatabaseError } = await supabase
+      .from("diaries")
+      .delete()
+      .eq("user_id", userId)
+      .eq("date", date);
+
+    if (DatabaseError) {
+      console.error("Database Error:", DatabaseError);
+      throw new Error("日記の削除に失敗しました。");
+    }
+  } catch (_error) {
+    throw new Error("予期せぬエラーが発生しました。");
   }
 }

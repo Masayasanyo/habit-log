@@ -1,6 +1,6 @@
 "use client";
 
-import { create, getTodayDiary } from "@/actions/diaries-actions";
+import { create } from "@/actions/diaries-actions";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,39 +14,25 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { getDateWithDayOfWeek } from "@/lib/date/date";
+import { getDate, getDateWithDayOfWeek } from "@/lib/date/date";
 import { Diary } from "@/types/diaries";
 import { AlertCircleIcon } from "lucide-react";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useState } from "react";
 
-export function DiaryForm() {
+export function DiaryForm(props: { data?: Diary }) {
   const [state, formAction, isPending] = useActionState(create, undefined);
-  const [diary, setDiary] = useState<Diary>({
-    id: null,
-    userId: null,
-    done: "",
-    learned: "",
-    challenge: "",
-    other: "",
-    date: "",
-  });
-
-  useEffect(() => {
-    async function fetchTodayDiary() {
-      const result = await getTodayDiary();
-      setDiary((prev) => ({
-        ...prev,
-        id: result?.id,
-        userId: result?.userId,
-        done: result?.done,
-        learned: result?.learned,
-        challenge: result?.challenge,
-        other: result?.other,
-        date: result?.date,
-      }));
-    }
-    fetchTodayDiary();
-  }, []);
+  const [diary, setDiary] = useState<Diary>(
+    props.data || {
+      id: null,
+      userId: null,
+      done: "",
+      learned: "",
+      challenge: "",
+      other: "",
+      date: getDate(),
+      createdAt: "",
+    },
+  );
 
   return (
     <Card className="max-h-xl w-full max-w-xl">
@@ -56,12 +42,13 @@ export function DiaryForm() {
           振り返りの時間。今日の出来事と学びを記録し、明日への糧にしましょう。
         </CardDescription>
         <CardAction>
-          <p>{getDateWithDayOfWeek()}</p>
+          <p>{getDateWithDayOfWeek(diary.date)}</p>
         </CardAction>
       </CardHeader>
       <CardContent className="scrollable">
         <form id="diary-form" action={formAction}>
           <div className="flex flex-col gap-6">
+            <input type="hidden" name="date" value={diary.date}></input>
             <div className="grid gap-2">
               <Label htmlFor="done">今日したこと</Label>
               <Textarea
