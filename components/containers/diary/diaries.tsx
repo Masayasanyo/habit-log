@@ -1,5 +1,8 @@
 "use client";
 
+import { fetchDiaries } from "@/actions/diaries-actions";
+import { Diary } from "@/types/diaries";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -29,7 +32,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { diaries } from "@/lib/test-data/diaries";
 import { DiaryColumns } from "@/types/diaries";
 import {
   ColumnDef,
@@ -87,6 +89,16 @@ export function Diaries() {
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
+  const [diaries, setDiaries] = useState<Diary[]>([]);
+
+  useEffect(() => {
+    async function fetchDiary() {
+      const result = await fetchDiaries();
+      setDiaries(result);
+    }
+    fetchDiary();
+  }, []);
+
   const table = useReactTable({
     data: diaries,
     columns,
@@ -118,7 +130,7 @@ export function Diaries() {
         <div className="w-full">
           <div className="flex items-center py-4">
             <Input
-              placeholder="..."
+              placeholder="検索"
               value={(table.getColumn("done")?.getFilterValue() as string) ?? ""}
               onChange={(event) => table.getColumn("done")?.setFilterValue(event.target.value)}
               className="max-w-sm"

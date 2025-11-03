@@ -1,6 +1,6 @@
 "use client";
 
-import { create, getTodayDiary } from "@/actions/diaries-actions";
+import { create, fetchTodayDiary } from "@/actions/diaries-actions";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,11 +29,12 @@ export function DiaryForm() {
     challenge: "",
     other: "",
     date: "",
+    createdAt: null, 
   });
 
   useEffect(() => {
-    async function fetchTodayDiary() {
-      const result = await getTodayDiary();
+    async function fetchDiary() {
+      const result = await fetchTodayDiary();
       setDiary((prev) => ({
         ...prev,
         id: result?.id,
@@ -43,9 +44,10 @@ export function DiaryForm() {
         challenge: result?.challenge,
         other: result?.other,
         date: result?.date,
+        createdAt: result?.created_at,
       }));
     }
-    fetchTodayDiary();
+    fetchDiary();
   }, []);
 
   return (

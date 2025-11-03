@@ -53,7 +53,7 @@ export async function create(_prevState: DiaryState | undefined, formData: FormD
   }
 }
 
-export async function getTodayDiary() {
+export async function fetchTodayDiary() {
   try {
     const userId = await getUserId();
     const date = getDate();
@@ -69,6 +69,28 @@ export async function getTodayDiary() {
       throw new Error("日記の取得に失敗しました。");
     }
     return data[0];
+  } catch (_error) {
+    return {
+      message: "予期せぬエラーが発生しました。",
+    };
+  }
+}
+
+export async function fetchDiaries() {
+  try {
+    const userId = await getUserId();
+
+    const { data, error: DatabaseError } = await supabase
+      .from("diaries")
+      .select()
+      .eq("user_id", userId)
+      .order('date', { ascending: false });
+
+    if (DatabaseError) {
+      console.error("Database Error:", DatabaseError);
+      throw new Error("日記の取得に失敗しました。");
+    }
+    return data;
   } catch (_error) {
     return {
       message: "予期せぬエラーが発生しました。",
