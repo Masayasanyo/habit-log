@@ -13,4 +13,7 @@ export const DiaryFormSchema = z.object({
   other: z.string({
     message: "その他自由に記入してください",
   }),
+  date: z.string({
+    message: "日付を入力してください",
+  }),
 });
