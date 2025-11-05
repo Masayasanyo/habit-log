@@ -62,7 +62,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import {
   Table,
   TableBody,
@@ -213,10 +212,9 @@ export function Diaries() {
         <CardDescription></CardDescription>
         <CardAction></CardAction>
       </CardHeader>
-      <Separator />
       <CardContent className="h-90">
         <div className="w-full">
-          <div className="flex items-start justify-between py-4">
+          <div className="flex items-start justify-between gap-2 py-4">
             <Input
               placeholder="検索"
               value={(table.getColumn("done")?.getFilterValue() as string) ?? ""}

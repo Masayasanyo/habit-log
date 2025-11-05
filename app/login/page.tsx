@@ -3,7 +3,7 @@ import LoginForm from "@/components/containers/login/form";
 
 export default function Page() {
   return (
-    <div>
+    <div className="flex min-h-screen items-center justify-center">
       <Suspense>
         <LoginForm />
       </Suspense>

@@ -1,6 +1,7 @@
 "use client";
 
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
+import { IconNotebook } from "@tabler/icons-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useActionState } from "react";
@@ -25,6 +26,10 @@ export default function LoginForm() {
 
   return (
     <Card className="w-full max-w-md">
+      <div className="mb-8 flex items-center justify-center gap-2 text-[#133e87]">
+        <IconNotebook className="!size-10 bg-red" />
+        <span className="font-semibold text-2xl">Habit Log</span>
+      </div>
       <CardHeader>
         <CardTitle>ログイン</CardTitle>
         <CardDescription>
