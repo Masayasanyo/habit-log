@@ -1,5 +1,6 @@
 "use client";
 
+import { IconNotebook } from "@tabler/icons-react";
 import {
   Sidebar,
   SidebarContent,
@@ -10,7 +11,6 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { items } from "@/lib/sidebar/menu-items";
-import { IconNotebook } from "@tabler/icons-react";
 import { NavMain } from "./nav-main";
 import { NavSecondary } from "./nav-secondary";
 import { NavUser } from "./nav-user";

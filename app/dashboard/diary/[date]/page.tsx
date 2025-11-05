@@ -1,8 +1,8 @@
+import type { Metadata } from "next";
 import { fetchDiary } from "@/actions/diaries-actions";
 import { Diaries } from "@/components/containers/diary/diaries";
 import { DiaryForm } from "@/components/containers/diary/diary-form";
 import { getDate } from "@/lib/date/date";
-import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "日記",

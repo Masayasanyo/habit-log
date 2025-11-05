@@ -1,9 +1,9 @@
+import { Suspense } from "react";
 import RegisterForm from "@/components/containers/register/form";
-import { Suspense } from 'react';
 
 export default function Page() {
   return (
-    <div className="">
+    <div className="flex min-h-screen items-center justify-center">
       <Suspense>
         <RegisterForm />
       </Suspense>

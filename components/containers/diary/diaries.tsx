@@ -1,5 +1,23 @@
 "use client";
 
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+  VisibilityState,
+} from "@tanstack/react-table";
+import { ja } from "date-fns/locale";
+import { ChevronDown, MoreHorizontal } from "lucide-react";
+import Link from "next/link";
+import * as React from "react";
+import { useEffect, useState } from "react";
+import type { DateRange } from "react-day-picker";
 import { deleteDiary, fetchDiaries } from "@/actions/diaries-actions";
 import {
   AlertDialog,
@@ -44,7 +62,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import {
   Table,
   TableBody,
@@ -56,24 +73,6 @@ import {
 import { formatDateToYYYYMMDD, getDate, getDateOneMonthAgo } from "@/lib/date/date";
 import { diaryColumns } from "@/lib/diaries/diary-columns";
 import { Diary, DiaryColumns } from "@/types/diaries";
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  SortingState,
-  useReactTable,
-  VisibilityState,
-} from "@tanstack/react-table";
-import { ja } from "date-fns/locale";
-import { ChevronDown, MoreHorizontal } from "lucide-react";
-import Link from "next/link";
-import * as React from "react";
-import { useEffect, useState } from "react";
-import type { DateRange } from "react-day-picker";
 
 export const columns: ColumnDef<DiaryColumns>[] = [
   {
@@ -213,10 +212,9 @@ export function Diaries() {
         <CardDescription></CardDescription>
         <CardAction></CardAction>
       </CardHeader>
-      <Separator />
       <CardContent className="h-90">
         <div className="w-full">
-          <div className="flex items-start justify-between py-4">
+          <div className="flex items-start justify-between gap-2 py-4">
             <Input
               placeholder="検索"
               value={(table.getColumn("done")?.getFilterValue() as string) ?? ""}

@@ -2,7 +2,7 @@
 
 import bcrypt from "bcryptjs";
 import { AuthError } from "next-auth";
-import { signIn, signOut, auth } from "@/auth";
+import { auth, signIn, signOut } from "@/auth";
 import { RegisterFormSchema } from "@/lib/schemas/register-form";
 import { supabase } from "@/lib/supabase";
 import type { RegisterState } from "@/types/user";
