@@ -14,7 +14,7 @@ export default async function Page({ params }: { params: { date: string } }) {
   const diary = await fetchDiary(date);
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-4">
       <DiaryForm data={diary} />
       <Diaries />
     </div>
