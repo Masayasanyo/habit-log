@@ -6,7 +6,7 @@ export interface Diary {
   challenge: string;
   other: string;
   date: string;
-  createdAt: string | null; 
+  createdAt: string | null;
 }
 
 export interface DiaryState {
