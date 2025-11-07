@@ -94,6 +94,6 @@ export async function deleteDiary(date: string) {
       throw new Error("日記の削除に失敗しました。");
     }
   } catch (_error) {
-    throw new Error("予期せぬエラーが発生しました。");
+    throw new Error("日記の削除に失敗しました。");
   }
 }

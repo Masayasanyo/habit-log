@@ -1,23 +1,5 @@
 "use client";
 
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  SortingState,
-  useReactTable,
-  VisibilityState,
-} from "@tanstack/react-table";
-import { ja } from "date-fns/locale";
-import { ChevronDown, MoreHorizontal } from "lucide-react";
-import Link from "next/link";
-import * as React from "react";
-import { useEffect, useState } from "react";
-import type { DateRange } from "react-day-picker";
 import { deleteDiary, fetchDiaries } from "@/actions/diaries-actions";
 import {
   AlertDialog,
@@ -62,6 +44,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Table,
   TableBody,
@@ -73,6 +56,26 @@ import {
 import { formatDateToYYYYMMDD, getDate, getDateOneMonthAgo } from "@/lib/date/date";
 import { diaryColumns } from "@/lib/diaries/diary-columns";
 import { Diary, DiaryColumns } from "@/types/diaries";
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+  VisibilityState,
+} from "@tanstack/react-table";
+import { ja } from "date-fns/locale";
+import { ChevronDown, MoreHorizontal } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import * as React from "react";
+import { useEffect, useState } from "react";
+import type { DateRange } from "react-day-picker";
+import { toast } from "sonner";
 
 export const columns: ColumnDef<DiaryColumns>[] = [
   {
@@ -104,6 +107,22 @@ export const columns: ColumnDef<DiaryColumns>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
+      const router = useRouter();
+      const [isPending, setIsPending] = useState(false);
+      async function handleDeleteDiary(date: string) {
+        try {
+          setIsPending(true);
+          await deleteDiary(date);
+          setIsPending(false);
+          router.push(getDate());
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            toast.error(error.message);
+          }
+          setIsPending(false);
+        }
+      }
+
       return (
         <div className="flex justify-end">
           <DropdownMenu>
@@ -135,9 +154,10 @@ export const columns: ColumnDef<DiaryColumns>[] = [
                     <AlertDialogCancel>キャンセル</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={() => {
-                        deleteDiary(row.getValue("date"));
+                        handleDeleteDiary(row.getValue("date"));
                       }}
                     >
+                      {isPending && <Spinner />}
                       OK
                     </AlertDialogAction>
                   </AlertDialogFooter>
