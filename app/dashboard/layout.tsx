@@ -13,7 +13,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       }
     >
       <AppSidebar variant="inset" />
-      <SidebarInset className="h-100vh">
+      <SidebarInset className="flex h-100vh flex-col">
         <SiteHeader />
         <main className="p-4">{children}</main>
       </SidebarInset>
