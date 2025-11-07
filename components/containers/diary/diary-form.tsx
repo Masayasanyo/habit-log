@@ -49,6 +49,12 @@ export function DiaryForm(props: { data?: Diary }) {
         <form id="diary-form" action={formAction}>
           <div className="flex flex-col gap-6">
             <input type="hidden" name="date" value={diary.date}></input>
+            {state?.message && (
+              <Alert variant="destructive">
+                <AlertCircleIcon />
+                <AlertTitle>{state.message}</AlertTitle>
+              </Alert>
+            )}
             <div className="grid gap-2">
               <Label htmlFor="done">今日したこと</Label>
               <Textarea
@@ -58,15 +64,7 @@ export function DiaryForm(props: { data?: Diary }) {
                 placeholder="今日取り組んだことを入力してください"
                 value={diary.done}
                 onChange={(e) => setDiary((prev) => ({ ...prev, done: e.target.value }))}
-                required
               />
-              <div aria-live="polite" aria-atomic="true">
-                {state?.errors?.done?.map((error: string) => (
-                  <p className="mt-2 text-red-500 text-sm" key={error}>
-                    {error}
-                  </p>
-                ))}
-              </div>
             </div>
             <div className="grid gap-2">
               <Label htmlFor="learned">学んだこと</Label>
@@ -77,15 +75,7 @@ export function DiaryForm(props: { data?: Diary }) {
                 placeholder="今日学んだことを入力してください"
                 value={diary.learned}
                 onChange={(e) => setDiary((prev) => ({ ...prev, learned: e.target.value }))}
-                required
               />
-              <div aria-live="polite" aria-atomic="true">
-                {state?.errors?.learned?.map((error: string) => (
-                  <p className="mt-2 text-red-500 text-sm" key={error}>
-                    {error}
-                  </p>
-                ))}
-              </div>
             </div>
             <div className="grid gap-2">
               <Label htmlFor="challenge">明日への課題</Label>
@@ -96,15 +86,7 @@ export function DiaryForm(props: { data?: Diary }) {
                 placeholder="明日への課題を入力してください"
                 value={diary.challenge}
                 onChange={(e) => setDiary((prev) => ({ ...prev, challenge: e.target.value }))}
-                required
               />
-              <div aria-live="polite" aria-atomic="true">
-                {state?.errors?.challenge?.map((error: string) => (
-                  <p className="mt-2 text-red-500 text-sm" key={error}>
-                    {error}
-                  </p>
-                ))}
-              </div>
             </div>
             <div className="grid gap-2">
               <Label htmlFor="other">その他</Label>
@@ -116,24 +98,11 @@ export function DiaryForm(props: { data?: Diary }) {
                 value={diary.other}
                 onChange={(e) => setDiary((prev) => ({ ...prev, other: e.target.value }))}
               />
-              <div aria-live="polite" aria-atomic="true">
-                {state?.errors?.other?.map((error: string) => (
-                  <p className="mt-2 text-red-500 text-sm" key={error}>
-                    {error}
-                  </p>
-                ))}
-              </div>
             </div>
           </div>
         </form>
       </CardContent>
       <CardFooter className="flex-col gap-2">
-        {state?.message && (
-          <Alert variant="destructive">
-            <AlertCircleIcon />
-            <AlertTitle>{state.message}</AlertTitle>
-          </Alert>
-        )}
         <Button type="submit" form="diary-form" aria-disabled={isPending} className="w-full">
           保存
         </Button>
