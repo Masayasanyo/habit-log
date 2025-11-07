@@ -1,9 +1,8 @@
 "use client";
 
-import { AlertCircleIcon } from "lucide-react";
-import { useActionState, useState } from "react";
+import { useState } from "react";
+import { Toaster, toast } from "sonner";
 import { create } from "@/actions/diaries-actions";
-import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,12 +14,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { getDate, getDateWithDayOfWeek } from "@/lib/date/date";
 import { Diary } from "@/types/diaries";
 
 export function DiaryForm(props: { data?: Diary }) {
-  const [state, formAction, isPending] = useActionState(create, undefined);
+  const [isPending, setIsPending] = useState(false);
   const [diary, setDiary] = useState<Diary>(
     props.data || {
       id: null,
@@ -34,6 +34,20 @@ export function DiaryForm(props: { data?: Diary }) {
     },
   );
 
+  async function saveDiary() {
+    try {
+      setIsPending(true);
+      await create(diary);
+      setIsPending(false);
+      toast.success("日記が保存されました！");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+      setIsPending(false);
+    }
+  }
+
   return (
     <Card className="max-h-xl w-full max-w-xl">
       <CardHeader>
@@ -46,15 +60,10 @@ export function DiaryForm(props: { data?: Diary }) {
         </CardAction>
       </CardHeader>
       <CardContent className="scrollable">
-        <form id="diary-form" action={formAction}>
+        <Toaster richColors position="top-center" />
+        <form id="diary-form" action={saveDiary}>
           <div className="flex flex-col gap-6">
             <input type="hidden" name="date" value={diary.date}></input>
-            {state?.message && (
-              <Alert variant="destructive">
-                <AlertCircleIcon />
-                <AlertTitle>{state.message}</AlertTitle>
-              </Alert>
-            )}
             <div className="grid gap-2">
               <Label htmlFor="done">今日したこと</Label>
               <Textarea
@@ -104,6 +113,7 @@ export function DiaryForm(props: { data?: Diary }) {
       </CardContent>
       <CardFooter className="flex-col gap-2">
         <Button type="submit" form="diary-form" aria-disabled={isPending} className="w-full">
+          {isPending && <Spinner />}
           保存
         </Button>
       </CardFooter>

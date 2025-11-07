@@ -2,42 +2,32 @@
 
 import { getUserId } from "@/actions/user-actions";
 import { supabase } from "@/lib/supabase";
-import type { DiaryState } from "@/types/diaries";
+import { Diary } from "@/types/diaries";
 
-export async function create(_prevState: DiaryState | undefined, formData: FormData) {
+export async function create(diary: Diary) {
   try {
-    if (
-      !formData.get("done") &&
-      !formData.get("learned") &&
-      !formData.get("challenge") &&
-      !formData.get("other")
-    )
-      return;
+    if (!diary.done && !diary.learned && !diary.challenge && !diary.other) return;
 
     const userId = await getUserId();
 
     const { error: DatabaseError } = await supabase.from("diaries").upsert(
       {
         user_id: userId,
-        done: formData.get("done"),
-        learned: formData.get("learned"),
-        challenge: formData.get("challenge"),
-        other: formData.get("other"),
-        date: formData.get("date"),
+        done: diary.done,
+        learned: diary.learned,
+        challenge: diary.challenge,
+        other: diary.other,
+        date: diary.date,
       },
       { onConflict: "user_id,date" },
     );
 
     if (DatabaseError) {
       console.error("Database error:", DatabaseError.message);
-      return {
-        message: "日記の登録に失敗しました。",
-      };
+      throw Error("日記の登録に失敗しました。");
     }
   } catch (_error) {
-    return {
-      message: "予期せぬエラーが発生しました。",
-    };
+    throw Error("日記の登録に失敗しました。");
   }
 }
 
