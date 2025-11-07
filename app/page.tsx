@@ -9,7 +9,7 @@ export default function Home() {
         {/* Header */}
         <header className="flex items-center justify-between py-5">
           <div className="flex items-center gap-2 text-[#133e87]">
-            <IconNotebook className="!size-5 bg-red" />
+            <IconNotebook className="size-5 bg-red" />
             <span className="font-semibold text-base">Habit Log</span>
           </div>
           <nav className="flex items-center gap-3">

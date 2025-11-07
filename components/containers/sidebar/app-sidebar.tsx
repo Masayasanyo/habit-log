@@ -23,7 +23,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
               <a href="/dashboard">
-                <IconNotebook className="!size-5" />
+                <IconNotebook className="size-5" />
                 <span className="font-semibold text-base">Habit Log</span>
               </a>
             </SidebarMenuButton>
