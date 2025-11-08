@@ -226,13 +226,13 @@ export function Diaries() {
   }
 
   return (
-    <Card className="h-200 w-full">
+    <Card className="">
       <CardHeader>
         <CardTitle>過去の日記一覧</CardTitle>
         <CardDescription></CardDescription>
         <CardAction></CardAction>
       </CardHeader>
-      <CardContent className="h-90">
+      <CardContent className="h-full">
         <div className="w-full">
           <div className="flex items-start justify-between gap-2 py-4">
             <Input

@@ -50,7 +50,7 @@ export function DiaryForm(props: { data?: Diary }) {
   }
 
   return (
-    <Card className="max-h-xl w-full max-w-xl">
+    <Card className="">
       <CardHeader>
         <CardTitle>{getDateWithDayOfWeek(diary.date)}</CardTitle>
         <CardDescription>
