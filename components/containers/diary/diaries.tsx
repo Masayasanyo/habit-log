@@ -1,25 +1,5 @@
 "use client";
 
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  SortingState,
-  useReactTable,
-  VisibilityState,
-} from "@tanstack/react-table";
-import { ja } from "date-fns/locale";
-import { ChevronDown, MoreHorizontal } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import * as React from "react";
-import { useEffect, useState } from "react";
-import type { DateRange } from "react-day-picker";
-import { toast } from "sonner";
 import { deleteDiary, fetchDiaries } from "@/actions/diaries-actions";
 import {
   AlertDialog,
@@ -76,6 +56,26 @@ import {
 import { formatDateToYYYYMMDD, getDate, getDateOneMonthAgo } from "@/lib/date/date";
 import { diaryColumns } from "@/lib/diaries/diary-columns";
 import { Diary, DiaryColumns } from "@/types/diaries";
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+  VisibilityState,
+} from "@tanstack/react-table";
+import { ja } from "date-fns/locale";
+import { ChevronDown, MoreHorizontal } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import * as React from "react";
+import { useEffect, useState } from "react";
+import type { DateRange } from "react-day-picker";
+import { toast } from "sonner";
 
 export const columns: ColumnDef<DiaryColumns>[] = [
   {
@@ -247,7 +247,7 @@ export function Diaries() {
                   <Button variant="outline">期間</Button>
                 </DialogTrigger>
 
-                <DialogContent className="max-w-[95vw] overflow-hidden sm:max-w-[600px]">
+                <DialogContent className="h-100 max-w-[95vw] overflow-scroll sm:h-auto sm:max-w-[600px] sm:overflow-hidden">
                   <DialogHeader>
                     <DialogTitle>期間を選択</DialogTitle>
                     <DialogDescription>表示したい期間を指定してください。</DialogDescription>
