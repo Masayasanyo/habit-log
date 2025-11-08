@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { fetchDiary } from "@/actions/diaries-actions";
 import { Diaries } from "@/components/containers/diary/diaries";
 import { DiaryForm } from "@/components/containers/diary/diary-form";
+import { Skeleton } from "@/components/ui/skeleton";
 import { getDate } from "@/lib/date/date";
 
 export const metadata: Metadata = {
@@ -14,9 +16,13 @@ export default async function Page({ params }: { params: { date: string } }) {
   const diary = await fetchDiary(date);
 
   return (
-    <div className="flex gap-4">
-      <DiaryForm data={diary} />
-      <Diaries />
+    <div className="grid h-full grid-cols-1 gap-4 md:grid-cols-2">
+      <Suspense fallback={<Skeleton className="h-full w-full rounded-xl" />}>
+        <DiaryForm data={diary} />
+      </Suspense>
+      <Suspense fallback={<Skeleton className="h-full w-full rounded-xl" />}>
+        <Diaries />
+      </Suspense>
     </div>
   );
 }

@@ -1,7 +1,10 @@
+import { Spinner } from "@/components/ui/spinner";
+
 export default function Loading() {
   return (
-    <div>
-      <h1>loading...</h1>
+    <div className="mt-30 flex w-full items-center justify-center gap-4">
+      <Spinner className="size-8 text-[#133e87]" />
+      <span className="text-xl">読み込み中...</span>
     </div>
   );
 }

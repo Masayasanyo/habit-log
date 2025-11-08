@@ -15,9 +15,11 @@ import {
 import { ja } from "date-fns/locale";
 import { ChevronDown, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import type { DateRange } from "react-day-picker";
+import { toast } from "sonner";
 import { deleteDiary, fetchDiaries } from "@/actions/diaries-actions";
 import {
   AlertDialog,
@@ -62,6 +64,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Table,
   TableBody,
@@ -104,6 +107,22 @@ export const columns: ColumnDef<DiaryColumns>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
+      const router = useRouter();
+      const [isPending, setIsPending] = useState(false);
+      async function handleDeleteDiary(date: string) {
+        try {
+          setIsPending(true);
+          await deleteDiary(date);
+          setIsPending(false);
+          router.push(getDate());
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            toast.error(error.message);
+          }
+          setIsPending(false);
+        }
+      }
+
       return (
         <div className="flex justify-end">
           <DropdownMenu>
@@ -135,9 +154,10 @@ export const columns: ColumnDef<DiaryColumns>[] = [
                     <AlertDialogCancel>キャンセル</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={() => {
-                        deleteDiary(row.getValue("date"));
+                        handleDeleteDiary(row.getValue("date"));
                       }}
                     >
+                      {isPending && <Spinner />}
                       OK
                     </AlertDialogAction>
                   </AlertDialogFooter>
@@ -206,13 +226,13 @@ export function Diaries() {
   }
 
   return (
-    <Card className="h-200 w-full">
+    <Card className="">
       <CardHeader>
         <CardTitle>過去の日記一覧</CardTitle>
         <CardDescription></CardDescription>
         <CardAction></CardAction>
       </CardHeader>
-      <CardContent className="h-90">
+      <CardContent className="h-full">
         <div className="w-full">
           <div className="flex items-start justify-between gap-2 py-4">
             <Input
@@ -227,7 +247,7 @@ export function Diaries() {
                   <Button variant="outline">期間</Button>
                 </DialogTrigger>
 
-                <DialogContent className="max-w-[95vw] overflow-hidden sm:max-w-[600px]">
+                <DialogContent className="h-100 max-w-[95vw] overflow-scroll sm:h-auto sm:max-w-[600px] sm:overflow-hidden">
                   <DialogHeader>
                     <DialogTitle>期間を選択</DialogTitle>
                     <DialogDescription>表示したい期間を指定してください。</DialogDescription>
