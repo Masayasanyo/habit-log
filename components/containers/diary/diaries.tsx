@@ -247,7 +247,7 @@ export function Diaries() {
                   <Button variant="outline">期間</Button>
                 </DialogTrigger>
 
-                <DialogContent className="h-[90vh] max-w-[95vw] overflow-scroll sm:h-auto sm:max-w-[600px] sm:overflow-hidden">
+                <DialogContent className="m-w-[95vw] sm:max-h-[600px] sm:max-w-[350px] sm:overflow-hidden">
                   <DialogHeader>
                     <DialogTitle>期間を選択</DialogTitle>
                     <DialogDescription>表示したい期間を指定してください。</DialogDescription>
@@ -257,11 +257,11 @@ export function Diaries() {
                     defaultMonth={dateRange?.from}
                     selected={dateRange}
                     onSelect={setDateRange}
-                    numberOfMonths={2}
-                    className="h-full w-full rounded-lg border shadow-sm"
+                    numberOfMonths={1}
+                    className="mx-auto w-[250px] rounded-lg border shadow-sm"
                     locale={ja}
                   />
-                  <DialogFooter>
+                  <DialogFooter className="justify-center">
                     <DialogClose asChild>
                       <Button variant="outline">キャンセル</Button>
                     </DialogClose>
