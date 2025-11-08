@@ -1,5 +1,3 @@
-/* TODO: スマホサイズ時の色の変更 */
-
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -126,6 +124,7 @@
 @layer utilities {
   [data-slot="sidebar"] {
     background-color: #133e87;
+    color: #ffffff;
   }
   [data-slot="sidebar-wrapper"] {
     background-color: #133e87;
