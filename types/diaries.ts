@@ -30,3 +30,8 @@ export type DiaryColumns = {
   other: string;
   date: string;
 };
+
+export type DateRangeStr = {
+  from: string;
+  to: string;
+};
