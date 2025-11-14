@@ -1,8 +1,5 @@
 "use client";
 
-import { IconNotebook } from "@tabler/icons-react";
-import Link from "next/link";
-import { useActionState } from "react";
 import { register } from "@/actions/user-actions";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,13 +14,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { RegisterState } from "@/types/user";
+import { IconNotebook } from "@tabler/icons-react";
+import Link from "next/link";
+import { useActionState } from "react";
 
 export default function RegisterForm() {
   const initialState: RegisterState = { message: null, errors: {} };
   const [state, formAction, isPending] = useActionState(register, initialState);
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="mx-4 w-sm md:w-md">
       <div className="mb-8 flex items-center justify-center gap-2 text-[#133e87]">
         <IconNotebook className="size-10 bg-red" />
         <span className="font-semibold text-2xl">Habit Log</span>
