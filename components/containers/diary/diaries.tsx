@@ -1,3 +1,5 @@
+// TODO: コンポーネント化
+
 "use client";
 
 import { deleteDiary, fetchDiaries } from "@/actions/diaries-actions";
@@ -25,10 +27,8 @@ import {
 } from "@/components/ui/card";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -43,7 +43,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Spinner } from "@/components/ui/spinner";
 import {
   Table,
@@ -53,9 +54,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatDateToYYYYMMDD, getDate, getDateOneMonthAgo } from "@/lib/date/date";
+import {
+  formatDateToYYYYMMDD,
+  getDate,
+  getDateOneMonthAgo,
+  getDateWithDayOfWeek,
+} from "@/lib/date/date";
 import { diaryColumns } from "@/lib/diaries/diary-columns";
-import { Diary, DiaryColumns } from "@/types/diaries";
+import { DateRangeStr, Diary, DiaryColumns } from "@/types/diaries";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -133,7 +139,7 @@ export const columns: ColumnDef<DiaryColumns>[] = [
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>{row.getValue("date")}</DropdownMenuLabel>
+              <DropdownMenuLabel>{getDateWithDayOfWeek(row.getValue("date"))}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
                 <Link href={`${row.getValue("date")}`}>編集</Link>
@@ -146,8 +152,8 @@ export const columns: ColumnDef<DiaryColumns>[] = [
                   <AlertDialogHeader>
                     <AlertDialogTitle>日記削除</AlertDialogTitle>
                     <AlertDialogDescription>
-                      {row.getValue("date")} の日記を本当に削除してもよろしいですか？
-                      この操作は元に戻せません。
+                      {getDateWithDayOfWeek(row.getValue("date"))}{" "}
+                      の日記を本当に削除してもよろしいですか？ この操作は元に戻せません。
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
@@ -184,7 +190,16 @@ export function Diaries() {
   const [rowSelection, setRowSelection] = React.useState({});
 
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
+  const [dateRangeStr, setDateRangeStr] = useState<DateRangeStr>({
+    from: getDateOneMonthAgo(),
+    to: getDate(),
+  });
   const [diaries, setDiaries] = useState<Diary[]>([]);
+
+  const [selectedColumn, setSelectedColumn] = useState<string>("したこと");
+
+  const [open, setOpen] = useState(false);
+  const [_date, _setDate] = useState<Date | undefined>(undefined);
 
   useEffect(() => {
     async function loadDiaries() {
@@ -216,98 +231,142 @@ export function Diaries() {
     },
   });
 
-  async function handleFilterByRange() {
+  async function handleFilterByRange(selectedDateRange: DateRange | undefined) {
+    setDateRange(selectedDateRange);
     if (!dateRange?.from || !dateRange.to) return;
 
     const from = formatDateToYYYYMMDD(dateRange.from);
     const to = formatDateToYYYYMMDD(dateRange.to);
     const data = await fetchDiaries(from, to);
+    setDateRangeStr({
+      from: from,
+      to: to,
+    });
     setDiaries(data);
   }
 
   return (
-    <Card className="">
+    <Card>
       <CardHeader>
         <CardTitle>過去の日記一覧</CardTitle>
         <CardDescription></CardDescription>
-        <CardAction></CardAction>
+        <CardAction>
+          <Dialog>
+            <DialogTrigger>
+              <Button variant="outline">詳細検索</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>詳細検索</DialogTitle>
+                <DialogDescription></DialogDescription>
+              </DialogHeader>
+              <div className="flex flex-col gap-6 py-4">
+                <div className="grid gap-2">
+                  <Label>期間</Label>
+                  <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" className="w-[250px]">
+                        {getDateWithDayOfWeek(dateRangeStr?.from)}
+                        {` - `}
+                        {getDateWithDayOfWeek(dateRangeStr?.to)}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+                      <Calendar
+                        mode="range"
+                        defaultMonth={dateRange?.from}
+                        selected={dateRange}
+                        onSelect={(date) => {
+                          handleFilterByRange(date);
+                          setOpen(false);
+                        }}
+                        numberOfMonths={1}
+                        className="mx-auto w-[250px] rounded-lg border shadow-sm"
+                        locale={ja}
+                        captionLayout="dropdown"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  {/* <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" className="w-[250px]">
+                        {getDateWithDayOfWeek(dateRangeStr?.from)}
+                        {` - `}
+                        {getDateWithDayOfWeek(dateRangeStr?.to)}
+                      </Button>
+                    </DialogTrigger>
+
+                    <DialogContent className="m-w-[95vw] sm:max-h-[600px] sm:max-w-[350px] sm:overflow-hidden">
+                      <DialogHeader>
+                        <DialogTitle>期間を選択</DialogTitle>
+                        <DialogDescription>表示したい期間を指定してください。</DialogDescription>
+                      </DialogHeader>
+                      <Calendar
+                        mode="range"
+                        defaultMonth={dateRange?.from}
+                        selected={dateRange}
+                        onSelect={(date) => handleFilterByRange(date)}
+                        numberOfMonths={1}
+                        className="mx-auto w-[250px] rounded-lg border shadow-sm"
+                        locale={ja}
+                      />
+                      <DialogFooter className="justify-center">
+                        <DialogClose asChild>
+                          <Button variant="outline">キャンセル</Button>
+                        </DialogClose>
+                        <DialogClose asChild>
+                          <Button onClick={handleFilterByRange}>適用</Button>
+                        </DialogClose>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog> */}
+                </div>
+                <div className="grid gap-2">
+                  <Label>項目</Label>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="w-[180px] justify-between">
+                        {selectedColumn}
+                        <ChevronDown />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuRadioGroup
+                        value={
+                          table
+                            .getAllColumns()
+                            .find((col) => col.getIsVisible() && col.id !== "date")?.id ?? ""
+                        }
+                        onValueChange={(value) => {
+                          table.getAllColumns().forEach((col) => {
+                            if (col.id === "date") {
+                              col.toggleVisibility(true);
+                            } else {
+                              col.toggleVisibility(col.id === value);
+                            }
+                          });
+                          setSelectedColumn(diaryColumns[value]);
+                        }}
+                      >
+                        {table
+                          .getAllColumns()
+                          .filter((column) => column.getCanHide() && column.id !== "date")
+                          .map((column) => (
+                            <DropdownMenuRadioItem key={column.id} value={column.id}>
+                              {diaryColumns[column.id]}
+                            </DropdownMenuRadioItem>
+                          ))}
+                      </DropdownMenuRadioGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </CardAction>
       </CardHeader>
       <CardContent className="h-full">
         <div className="w-full">
-          <div className="flex items-start justify-between gap-2 py-4">
-            <Input
-              placeholder="検索"
-              value={(table.getColumn("done")?.getFilterValue() as string) ?? ""}
-              onChange={(event) => table.getColumn("done")?.setFilterValue(event.target.value)}
-              className="max-w-sm"
-            />
-            <div className="flex gap-2">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="outline">期間</Button>
-                </DialogTrigger>
-
-                <DialogContent className="h-[90vh] max-w-[95vw] overflow-scroll sm:h-auto sm:max-w-[600px] sm:overflow-hidden">
-                  <DialogHeader>
-                    <DialogTitle>期間を選択</DialogTitle>
-                    <DialogDescription>表示したい期間を指定してください。</DialogDescription>
-                  </DialogHeader>
-                  <Calendar
-                    mode="range"
-                    defaultMonth={dateRange?.from}
-                    selected={dateRange}
-                    onSelect={setDateRange}
-                    numberOfMonths={2}
-                    className="h-full w-full rounded-lg border shadow-sm"
-                    locale={ja}
-                  />
-                  <DialogFooter>
-                    <DialogClose asChild>
-                      <Button variant="outline">キャンセル</Button>
-                    </DialogClose>
-                    <DialogClose asChild>
-                      <Button onClick={handleFilterByRange}>適用</Button>
-                    </DialogClose>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="ml-auto">
-                    項目 <ChevronDown />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuRadioGroup
-                    value={
-                      table.getAllColumns().find((col) => col.getIsVisible() && col.id !== "date")
-                        ?.id ?? ""
-                    }
-                    onValueChange={(value) => {
-                      table.getAllColumns().forEach((col) => {
-                        if (col.id === "date") {
-                          col.toggleVisibility(true);
-                        } else {
-                          col.toggleVisibility(col.id === value);
-                        }
-                      });
-                    }}
-                  >
-                    {table
-                      .getAllColumns()
-                      .filter((column) => column.getCanHide() && column.id !== "date")
-                      .map((column) => (
-                        <DropdownMenuRadioItem key={column.id} value={column.id}>
-                          {diaryColumns[column.id]}
-                        </DropdownMenuRadioItem>
-                      ))}
-                  </DropdownMenuRadioGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-
           <div className="overflow-hidden rounded-md border">
             <Table>
               <TableHeader>
