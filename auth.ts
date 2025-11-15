@@ -1,10 +1,10 @@
-import bcrypt from "bcryptjs";
-import NextAuth from "next-auth";
-import Credentials from "next-auth/providers/credentials";
-import { z } from "zod";
 import { authConfig } from "@/auth.config";
 import { supabase } from "@/lib/supabase";
 import type { User } from "@/types/user";
+import bcrypt from "bcryptjs";
+import NextAuth from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+import { LoginFormSchema } from "./lib/schemas/login-form";
 
 async function getUser(email: string): Promise<User | undefined> {
   try {
@@ -27,12 +27,10 @@ export const { auth, signIn, signOut } = NextAuth({
   providers: [
     Credentials({
       async authorize(credentials) {
-        const parsedCredentials = z
-          .object({ email: z.email(), password: z.string().min(6) })
-          .safeParse(credentials);
+        const validatedFields = LoginFormSchema.safeParse(credentials);
 
-        if (parsedCredentials.success) {
-          const { email, password } = parsedCredentials.data;
+        if (validatedFields.success) {
+          const { email, password } = validatedFields.data;
           const user = await getUser(email);
           if (!user) return null;
           const passwordsMatch = await bcrypt.compare(password, user.password);

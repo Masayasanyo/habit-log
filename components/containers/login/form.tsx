@@ -13,16 +13,35 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
+import { Spinner } from "@/components/ui/spinner";
 import { IconNotebook } from "@tabler/icons-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useActionState } from "react";
+import { useState } from "react";
+import { Toaster, toast } from "sonner";
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
-  const [errorMessage, formAction, isPending] = useActionState(authenticate, undefined);
+  const [isPending, setIsPending] = useState(false);
+  // const [error, setError] = useState(undefined);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    try {
+      const formData = new FormData(e.currentTarget);
+      setIsPending(true);
+      await authenticate(formData);
+      setIsPending(false);
+      toast.success("ログインに成功しました！");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+      setIsPending(false);
+    }
+  }
 
   return (
     <Card className="mx-4 w-sm md:w-md">
@@ -40,11 +59,12 @@ export default function LoginForm() {
         </CardAction>
       </CardHeader>
       <CardContent>
-        <form id="login-form" action={formAction}>
+        <Toaster richColors position="top-center" />
+        <form id="login-form" onSubmit={handleSubmit}>
           <div className="flex flex-col gap-6">
             <div className="grid gap-2">
               <Label htmlFor="email">メールアドレス</Label>
-              <Input id="email" name="email" type="email" placeholder="m@example.com" required />
+              <Input id="email" name="email" type="email" placeholder="m@example.com" />
             </div>
             <div className="grid gap-2">
               <div className="flex items-center">
@@ -56,7 +76,7 @@ export default function LoginForm() {
                   パスワードを忘れた場合
                 </a>
               </div>
-              <Input id="password" name="password" type="password" required />
+              <Input id="password" name="password" type="password" />
             </div>
           </div>
           <input type="hidden" name="redirectTo" value={callbackUrl} />
@@ -64,16 +84,9 @@ export default function LoginForm() {
       </CardContent>
       <CardFooter className="flex-col gap-2">
         <Button type="submit" className="w-full" form="login-form" aria-disabled={isPending}>
+          {isPending && <Spinner />}
           ログイン
         </Button>
-        <div className="flex h-8 items-end space-x-1" aria-live="polite" aria-atomic="true">
-          {errorMessage && (
-            <>
-              <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
-              <p className="text-red-500 text-sm">{errorMessage}</p>
-            </>
-          )}
-        </div>
       </CardFooter>
     </Card>
   );
