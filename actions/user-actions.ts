@@ -3,9 +3,10 @@
 import bcrypt from "bcryptjs";
 import { AuthError } from "next-auth";
 import { auth, signIn, signOut } from "@/auth";
+import { LoginFormSchema } from "@/lib/schemas/login-form";
 import { RegisterFormSchema } from "@/lib/schemas/register-form";
 import { supabase } from "@/lib/supabase";
-import type { RegisterState } from "@/types/user";
+import type { LoginState, RegisterState } from "@/types/user";
 
 export async function getUserId() {
   const session = await auth();
@@ -51,16 +52,32 @@ export async function register(_prevState: RegisterState | undefined, formData: 
   await signIn("credentials", formData);
 }
 
-export async function authenticate(_prevState: string | undefined, formData: FormData) {
+export async function authenticate(_prevState: LoginState | undefined, formData: FormData) {
+  const validatedFields = LoginFormSchema.safeParse({
+    email: formData.get("email"),
+    password: formData.get("password"),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "ログインに失敗しました。",
+    };
+  }
+
   try {
     await signIn("credentials", formData);
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
-          return "Invalid credentials.";
+          return {
+            message: "メールアドレスまたはパスワードに誤りがあります。",
+          };
         default:
-          return "Something went wrong.";
+          return {
+            message: "ログインに失敗しました。",
+          };
       }
     }
     throw error;

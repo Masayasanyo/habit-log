@@ -15,3 +15,11 @@ export interface RegisterState {
   };
   message?: string | null;
 }
+
+export type LoginState = {
+  errors?: {
+    email?: string[];
+    password?: string[];
+  };
+  message?: string | null;
+};
