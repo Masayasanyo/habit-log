@@ -1,12 +1,12 @@
 "use server";
 
+import bcrypt from "bcryptjs";
+import { AuthError } from "next-auth";
 import { auth, signIn, signOut } from "@/auth";
 import { LoginFormSchema } from "@/lib/schemas/login-form";
 import { RegisterFormSchema } from "@/lib/schemas/register-form";
 import { supabase } from "@/lib/supabase";
-import type { RegisterState } from "@/types/user";
-import bcrypt from "bcryptjs";
-import { AuthError } from "next-auth";
+import type { LoginState, RegisterState } from "@/types/user";
 
 export async function getUserId() {
   const session = await auth();
@@ -52,7 +52,7 @@ export async function register(_prevState: RegisterState | undefined, formData: 
   await signIn("credentials", formData);
 }
 
-export async function authenticate(formData: FormData) {
+export async function authenticate(_prevState: LoginState | undefined, formData: FormData) {
   const validatedFields = LoginFormSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -80,7 +80,7 @@ export async function authenticate(formData: FormData) {
           };
       }
     }
-    throw new Error("ログインに失敗しました。");
+    throw error;
   }
 }
 
