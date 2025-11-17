@@ -1,5 +1,4 @@
-// TODO: コンポーネント化
-
+// TODO: create components
 "use client";
 
 import {
@@ -64,7 +63,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Spinner } from "@/components/ui/spinner";
 import {
   Table,
@@ -198,8 +196,19 @@ export function Diaries() {
 
   const [selectedColumn, setSelectedColumn] = useState<string>("したこと");
 
-  const [open, setOpen] = useState(false);
-  const [_date, _setDate] = useState<Date | undefined>(undefined);
+  async function handleFilterByRange(selectedDateRange: DateRange | undefined) {
+    setDateRange(selectedDateRange);
+    if (!selectedDateRange?.from || !selectedDateRange.to) return;
+
+    const from = formatDateToYYYYMMDD(selectedDateRange.from);
+    const to = formatDateToYYYYMMDD(selectedDateRange.to);
+    const data = await fetchDiaries(from, to);
+    setDateRangeStr({
+      from: from,
+      to: to,
+    });
+    setDiaries(data);
+  }
 
   useEffect(() => {
     async function loadDiaries() {
@@ -231,20 +240,6 @@ export function Diaries() {
     },
   });
 
-  async function handleFilterByRange(selectedDateRange: DateRange | undefined) {
-    setDateRange(selectedDateRange);
-    if (!dateRange?.from || !dateRange.to) return;
-
-    const from = formatDateToYYYYMMDD(dateRange.from);
-    const to = formatDateToYYYYMMDD(dateRange.to);
-    const data = await fetchDiaries(from, to);
-    setDateRangeStr({
-      from: from,
-      to: to,
-    });
-    setDiaries(data);
-  }
-
   return (
     <Card>
       <CardHeader>
@@ -263,63 +258,38 @@ export function Diaries() {
               <div className="flex flex-col gap-6 py-4">
                 <div className="grid gap-2">
                   <Label>期間</Label>
-                  <Popover open={open} onOpenChange={setOpen}>
-                    <PopoverTrigger asChild>
-                      <Button variant="outline" className="w-[250px]">
-                        {getDateWithDayOfWeek(dateRangeStr?.from)}
-                        {` - `}
-                        {getDateWithDayOfWeek(dateRangeStr?.to)}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto overflow-hidden p-0" align="start">
-                      <Calendar
-                        mode="range"
-                        defaultMonth={dateRange?.from}
-                        selected={dateRange}
-                        onSelect={(date) => {
-                          handleFilterByRange(date);
-                          setOpen(false);
-                        }}
-                        numberOfMonths={1}
-                        className="mx-auto w-[250px] rounded-lg border shadow-sm"
-                        locale={ja}
-                        captionLayout="dropdown"
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  {/* <Dialog>
-                    <DialogTrigger asChild>
-                      <Button variant="outline" className="w-[250px]">
+                  <Dialog>
+                    <DialogTrigger>
+                      <Button variant="outline" className="mr-auto block">
                         {getDateWithDayOfWeek(dateRangeStr?.from)}
                         {` - `}
                         {getDateWithDayOfWeek(dateRangeStr?.to)}
                       </Button>
                     </DialogTrigger>
-
-                    <DialogContent className="m-w-[95vw] sm:max-h-[600px] sm:max-w-[350px] sm:overflow-hidden">
+                    <DialogContent className="h-[450px] w-[350px] overflow-scroll sm:max-w-[550px] md:w-[550px]">
                       <DialogHeader>
-                        <DialogTitle>期間を選択</DialogTitle>
-                        <DialogDescription>表示したい期間を指定してください。</DialogDescription>
+                        <DialogTitle>日記の期間</DialogTitle>
+                        <DialogDescription>
+                          {getDateWithDayOfWeek(dateRangeStr?.from)}
+                          {` - `}
+                          {getDateWithDayOfWeek(dateRangeStr?.to)}
+                        </DialogDescription>
                       </DialogHeader>
-                      <Calendar
-                        mode="range"
-                        defaultMonth={dateRange?.from}
-                        selected={dateRange}
-                        onSelect={(date) => handleFilterByRange(date)}
-                        numberOfMonths={1}
-                        className="mx-auto w-[250px] rounded-lg border shadow-sm"
-                        locale={ja}
-                      />
-                      <DialogFooter className="justify-center">
-                        <DialogClose asChild>
-                          <Button variant="outline">キャンセル</Button>
-                        </DialogClose>
-                        <DialogClose asChild>
-                          <Button onClick={handleFilterByRange}>適用</Button>
-                        </DialogClose>
-                      </DialogFooter>
+                      <div className="flex w-full justify-center">
+                        <Calendar
+                          mode="range"
+                          defaultMonth={dateRange?.from}
+                          selected={dateRange}
+                          onSelect={(date) => {
+                            handleFilterByRange(date);
+                          }}
+                          numberOfMonths={2}
+                          locale={ja}
+                          className="rounded-md border"
+                        />
+                      </div>
                     </DialogContent>
-                  </Dialog> */}
+                  </Dialog>
                 </div>
                 <div className="grid gap-2">
                   <Label>項目</Label>
