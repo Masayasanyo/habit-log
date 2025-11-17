@@ -1,3 +1,5 @@
+// TODO: change text color or bg color
+
 import { Spinner } from "@/components/ui/spinner";
 
 export default function Loading() {
