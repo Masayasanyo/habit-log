@@ -1,9 +1,5 @@
 "use client";
 
-import { IconNotebook } from "@tabler/icons-react";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useActionState } from "react";
 import { authenticate } from "@/actions/user-actions";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +15,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { LoginState } from "@/types/user";
+import { IconNotebook } from "@tabler/icons-react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useActionState } from "react";
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
@@ -28,7 +28,7 @@ export default function LoginForm() {
 
   return (
     <Card className="mx-4 w-sm md:w-md">
-      <div className="mb-8 flex items-center justify-center gap-2 text-[#133e87]">
+      <div className="mb-8 flex items-center justify-center gap-2 text-primary">
         <IconNotebook className="size-10 bg-red" />
         <span className="font-semibold text-2xl">Habit Log</span>
       </div>
