@@ -1,5 +1,8 @@
 "use client";
 
+import { IconNotebook } from "@tabler/icons-react";
+import Link from "next/link";
+import { useActionState } from "react";
 import { register } from "@/actions/user-actions";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,9 +17,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { RegisterState } from "@/types/user";
-import { IconNotebook } from "@tabler/icons-react";
-import Link from "next/link";
-import { useActionState } from "react";
 
 export default function RegisterForm() {
   const initialState: RegisterState = { message: null, errors: {} };

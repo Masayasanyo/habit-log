@@ -1,10 +1,10 @@
-import type { Metadata } from "next";
-import { Suspense } from "react";
 import { fetchDiary } from "@/actions/diaries-actions";
-import { Diaries } from "@/components/containers/diary/diaries";
-import { DiaryForm } from "@/components/containers/diary/diary-form";
+import { DiaryArchive } from "@/components/containers/diary-archive/DiaryArchive";
+import { DiaryForm } from "@/components/containers/diary-form/diary-form";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getDate } from "@/lib/date/date";
+import type { Metadata } from "next";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "日記",
@@ -21,7 +21,7 @@ export default async function Page({ params }: { params: { date: string } }) {
         <DiaryForm data={diary} />
       </Suspense>
       <Suspense fallback={<Skeleton className="h-full w-full rounded-xl" />}>
-        <Diaries />
+        <DiaryArchive />
       </Suspense>
     </div>
   );

@@ -1,8 +1,8 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { pageTitles } from "@/lib/header/page-titles";
-import { usePathname } from "next/navigation";
 
 export function SiteHeader() {
   const pathName = usePathname();

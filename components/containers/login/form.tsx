@@ -1,5 +1,9 @@
 "use client";
 
+import { IconNotebook } from "@tabler/icons-react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useActionState } from "react";
 import { authenticate } from "@/actions/user-actions";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,10 +19,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { LoginState } from "@/types/user";
-import { IconNotebook } from "@tabler/icons-react";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useActionState } from "react";
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
