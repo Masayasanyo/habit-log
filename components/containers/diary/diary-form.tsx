@@ -1,8 +1,7 @@
+// TODO: if the field is empty do not show success toast
+
 "use client";
 
-import Link from "next/link";
-import { useState } from "react";
-import { Toaster, toast } from "sonner";
 import { create } from "@/actions/diaries-actions";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +18,9 @@ import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { getDate, getDateWithDayOfWeek } from "@/lib/date/date";
 import { Diary } from "@/types/diaries";
+import Link from "next/link";
+import { useState } from "react";
+import { Toaster, toast } from "sonner";
 
 export function DiaryForm(props: { data?: Diary }) {
   const [isPending, setIsPending] = useState(false);
