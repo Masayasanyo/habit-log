@@ -1,3 +1,5 @@
+import type { Table as TableType } from "@tanstack/react-table";
+import { flexRender } from "@tanstack/react-table";
 import { columns } from "@/components/containers/diary-archive/columns";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,8 +11,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { DiaryColumns } from "@/types/diaries";
-import type { Table as TableType } from "@tanstack/react-table";
-import { flexRender } from "@tanstack/react-table";
 
 export default function DiaryArchiveTable({ table }: { table: TableType<DiaryColumns> }) {
   return (
