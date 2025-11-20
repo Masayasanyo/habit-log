@@ -8,8 +8,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <div className="w-full">
-      <Tabs defaultValue="good">
+    <div className="h-full w-full">
+      <Tabs defaultValue="good" className="h-full w-full">
         <TabsList>
           <TabsTrigger value="good">続けたい習慣</TabsTrigger>
           <TabsTrigger value="bad">やめたい習慣</TabsTrigger>

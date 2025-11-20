@@ -1,4 +1,4 @@
-export const habit_records = [
+export const habitRecords = [
   { id: 0, habitId: 0, date: "2025-01-01", status: true },
   { id: 1, habitId: 0, date: "2025-01-02", status: true },
   { id: 2, habitId: 0, date: "2025-01-03", status: false },
