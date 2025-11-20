@@ -1,5 +1,12 @@
-import { IconHelp, IconHome, IconPencil, IconSearch, IconSettings } from "@tabler/icons-react";
 import { getDate } from "@/lib/date/date";
+import {
+  IconCheckbox,
+  IconHelp,
+  IconHome,
+  IconPencil,
+  IconSearch,
+  IconSettings,
+} from "@tabler/icons-react";
 
 // Menu items.
 export const items = {
@@ -18,6 +25,11 @@ export const items = {
       title: "日記",
       url: `/dashboard/diary/${getDate()}`,
       icon: IconPencil,
+    },
+    {
+      title: "習慣",
+      url: `/dashboard/habits`,
+      icon: IconCheckbox,
     },
   ],
   navSecondary: [

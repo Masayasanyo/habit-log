@@ -1,8 +1,5 @@
 "use client";
 
-import Link from "next/link";
-import { useState } from "react";
-import { Toaster, toast } from "sonner";
 import { create } from "@/actions/diaries-actions";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +16,9 @@ import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { getDate, getDateWithDayOfWeek } from "@/lib/date/date";
 import { Diary } from "@/types/diaries";
+import Link from "next/link";
+import { useState } from "react";
+import { Toaster, toast } from "sonner";
 
 export function DiaryForm(props: { data?: Diary }) {
   const [isPending, setIsPending] = useState(false);
@@ -50,7 +50,7 @@ export function DiaryForm(props: { data?: Diary }) {
   }
 
   return (
-    <Card className="">
+    <Card>
       <CardHeader>
         <CardTitle>{getDateWithDayOfWeek(diary.date)}</CardTitle>
         <CardDescription>
@@ -114,8 +114,8 @@ export function DiaryForm(props: { data?: Diary }) {
           </div>
         </form>
       </CardContent>
-      <CardFooter className="flex-col gap-2">
-        <Button type="submit" form="diary-form" aria-disabled={isPending} className="w-full">
+      <CardFooter>
+        <Button type="submit" form="diary-form" aria-disabled={isPending} className="flex gap-2">
           {isPending && <Spinner />}
           保存
         </Button>
