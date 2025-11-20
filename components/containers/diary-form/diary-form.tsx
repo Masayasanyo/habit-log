@@ -1,5 +1,3 @@
-// TODO: if the field is empty do not show success toast
-
 "use client";
 
 import Link from "next/link";
