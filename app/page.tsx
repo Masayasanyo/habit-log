@@ -8,7 +8,7 @@ export default function Home() {
       <div className="mx-auto max-w-6xl px-4">
         {/* Header */}
         <header className="flex items-center justify-between py-5">
-          <div className="flex items-center gap-2 text-[#133e87]">
+          <div className="flex items-center gap-2 text-primary">
             <IconNotebook className="size-5 bg-red" />
             <span className="font-semibold text-base">Habit Log</span>
           </div>

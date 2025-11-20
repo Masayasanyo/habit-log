@@ -5,9 +5,10 @@ import { supabase } from "@/lib/supabase";
 import { Diary } from "@/types/diaries";
 
 export async function create(diary: Diary) {
+  if (!diary.done && !diary.learned && !diary.challenge && !diary.other) {
+    throw Error("日記に何も記入されていません。");
+  }
   try {
-    if (!diary.done && !diary.learned && !diary.challenge && !diary.other) return;
-
     const userId = await getUserId();
 
     const { error: DatabaseError } = await supabase.from("diaries").upsert(
@@ -26,7 +27,8 @@ export async function create(diary: Diary) {
       console.error("Database error:", DatabaseError.message);
       throw Error("日記の登録に失敗しました。");
     }
-  } catch (_error) {
+  } catch (error) {
+    console.error(error);
     throw Error("日記の登録に失敗しました。");
   }
 }

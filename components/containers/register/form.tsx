@@ -24,7 +24,7 @@ export default function RegisterForm() {
 
   return (
     <Card className="mx-4 w-sm md:w-md">
-      <div className="mb-8 flex items-center justify-center gap-2 text-[#133e87]">
+      <div className="mb-8 flex items-center justify-center gap-2 text-primary">
         <IconNotebook className="size-10 bg-red" />
         <span className="font-semibold text-2xl">Habit Log</span>
       </div>
