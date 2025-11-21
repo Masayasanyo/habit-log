@@ -1,6 +1,6 @@
+import type { Metadata } from "next";
 import GoodHabits from "@/components/containers/good-habits/GoodHabits";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "習慣",
