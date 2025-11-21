@@ -1,6 +1,6 @@
-import type { Metadata } from "next";
 import GoodHabits from "@/components/containers/good-habits/GoodHabits";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "習慣",
@@ -12,7 +12,7 @@ export default function Page() {
       <Tabs defaultValue="good" className="h-full w-full">
         <TabsList>
           <TabsTrigger value="good">続けたい習慣</TabsTrigger>
-          <TabsTrigger value="bad">やめたい習慣</TabsTrigger>
+          <TabsTrigger value="bad">辞めたい習慣</TabsTrigger>
         </TabsList>
         <TabsContent value="good">
           <GoodHabits />

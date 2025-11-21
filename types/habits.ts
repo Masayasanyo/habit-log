@@ -21,6 +21,7 @@ export interface NewHabit {
 }
 
 export interface HabitFormState {
+  success: boolean | null;
   errors?: {
     title?: string[];
     start?: string[];

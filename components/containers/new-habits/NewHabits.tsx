@@ -1,8 +1,7 @@
+// TODO: create habit records
+
 "use client";
 
-import { ja } from "date-fns/locale";
-import { ChevronDownIcon } from "lucide-react";
-import { useActionState, useState } from "react";
 import { createHabit } from "@/actions/habits-actions";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -19,6 +18,10 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { formatDateToYYYYMMDD, getDateWithDayOfWeek } from "@/lib/date/date";
 import { HabitFormState } from "@/types/habits";
+import { ja } from "date-fns/locale";
+import { ChevronDownIcon } from "lucide-react";
+import { useState } from "react";
+import { Toaster, toast } from "sonner";
 
 export default function NewHabits() {
   const today = new Date();
@@ -28,9 +31,9 @@ export default function NewHabits() {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date>(today);
   const [dateStr, setDateStr] = useState<string>(dateWithDayOfWeek);
-
-  const initialState: HabitFormState = { message: null, errors: {} };
-  const [state, formAction, pending] = useActionState(createHabit, initialState);
+  const [pending, _setPending] = useState<boolean>(false);
+  const initialState: HabitFormState = { success: null, message: null, errors: {} };
+  const [state, setState] = useState<HabitFormState>(initialState);
 
   function handleDate(date: Date | undefined) {
     if (!date) return;
@@ -40,15 +43,22 @@ export default function NewHabits() {
     setDateStr(formattedDate);
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
+    setState(initialState);
     const formData = new FormData(e.currentTarget);
-    formAction(formData);
+    const result = await createHabit(formData);
+    if (result.success) {
+      location.reload();
+    } else {
+      setState(result);
+      toast.error(result.message);
+    }
   }
 
   return (
     <form id="new-habit" onSubmit={handleSubmit} className="flex w-full flex-col gap-4">
+      <Toaster richColors position="top-center" />
       <div className="grid gap-2">
         <Label htmlFor="title">タイトル</Label>
         <Input id="title" type="text" name="title" placeholder="習慣のタイトルを入力して下さい" />
@@ -116,7 +126,6 @@ export default function NewHabits() {
           追加
         </Button>
       </div>
-      {state?.message && <p className="mt-2 text-red-500 text-sm">{state.message}</p>}
     </form>
   );
 }
