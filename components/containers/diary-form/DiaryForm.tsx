@@ -1,9 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { useState } from "react";
-import { Toaster, toast } from "sonner";
-import { create } from "@/actions/diaries-actions";
+import { createDiary } from "@/actions/diaries-actions";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,6 +16,9 @@ import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { getDateStr, getDateWithDayOfWeek } from "@/lib/date/date";
 import { Diary } from "@/types/diaries";
+import Link from "next/link";
+import { useState } from "react";
+import { Toaster, toast } from "sonner";
 
 export function DiaryForm(props: { data?: Diary }) {
   const [isPending, setIsPending] = useState(false);
@@ -38,7 +38,7 @@ export function DiaryForm(props: { data?: Diary }) {
   async function saveDiary() {
     try {
       setIsPending(true);
-      await create(diary);
+      await createDiary(diary);
       setIsPending(false);
       toast.success("日記が保存されました！");
     } catch (error: unknown) {
