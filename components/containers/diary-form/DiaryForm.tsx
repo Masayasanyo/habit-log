@@ -1,5 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import { useState } from "react";
+import { Toaster, toast } from "sonner";
 import { create } from "@/actions/diaries-actions";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,11 +17,8 @@ import {
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
-import { getDate, getDateWithDayOfWeek } from "@/lib/date/date";
+import { getDateStr, getDateWithDayOfWeek } from "@/lib/date/date";
 import { Diary } from "@/types/diaries";
-import Link from "next/link";
-import { useState } from "react";
-import { Toaster, toast } from "sonner";
 
 export function DiaryForm(props: { data?: Diary }) {
   const [isPending, setIsPending] = useState(false);
@@ -30,7 +30,7 @@ export function DiaryForm(props: { data?: Diary }) {
       learned: "",
       challenge: "",
       other: "",
-      date: getDate(),
+      date: getDateStr(),
       createdAt: "",
     },
   );
@@ -58,7 +58,7 @@ export function DiaryForm(props: { data?: Diary }) {
         </CardDescription>
         <CardAction>
           <Button variant="outline">
-            <Link href={getDate()}>今日の日記</Link>
+            <Link href={getDateStr()}>今日の日記</Link>
           </Button>
         </CardAction>
       </CardHeader>

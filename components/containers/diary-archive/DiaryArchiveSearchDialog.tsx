@@ -1,5 +1,11 @@
 "use client";
 
+import { Table } from "@tanstack/react-table";
+import { ja } from "date-fns/locale";
+import { ChevronDown } from "lucide-react";
+import * as React from "react";
+import { useState } from "react";
+import type { DateRange } from "react-day-picker";
 import { fetchDiaries } from "@/actions/diaries-actions";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -22,18 +28,12 @@ import {
 import { Label } from "@/components/ui/label";
 import {
   formatDateToYYYYMMDD,
-  getDate,
   getDateOneMonthAgo,
+  getDateStr,
   getDateWithDayOfWeek,
 } from "@/lib/date/date";
 import { diaryColumns } from "@/lib/diaries/diary-columns";
 import { DateRangeStr, Diary, DiaryColumns } from "@/types/diaries";
-import { Table } from "@tanstack/react-table";
-import { ja } from "date-fns/locale";
-import { ChevronDown } from "lucide-react";
-import * as React from "react";
-import { useState } from "react";
-import type { DateRange } from "react-day-picker";
 
 export default function DiaryArchiveSearchDialog({
   setDiaries,
@@ -45,7 +45,7 @@ export default function DiaryArchiveSearchDialog({
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [dateRangeStr, setDateRangeStr] = useState<DateRangeStr>({
     from: getDateOneMonthAgo(),
-    to: getDate(),
+    to: getDateStr(),
   });
   const [selectedColumn, setSelectedColumn] = useState<string>("したこと");
 

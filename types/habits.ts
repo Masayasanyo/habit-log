@@ -8,9 +8,23 @@ export interface Habits {
   createdAt: string | null;
 }
 
-export interface habitRecords {
+export interface HabitRecords {
   id: number | null;
   habitId: number;
   date: string;
   status: boolean;
+}
+
+export interface NewHabit {
+  title: string;
+  start: Date;
+}
+
+export interface HabitFormState {
+  errors?: {
+    title?: string[];
+    start?: string[];
+    type?: string[];
+  };
+  message?: string | null;
 }

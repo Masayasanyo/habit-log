@@ -6,7 +6,7 @@ export function getDateWithDayOfWeek(date: string): string {
   return `${year}/${month}/${day}(${dayOfWeekLong})`;
 }
 
-export function getDate(): string {
+export function getDateStr(): string {
   const today = new Date();
   const year = today.getFullYear();
   const month = String(today.getMonth() + 1).padStart(2, "0");

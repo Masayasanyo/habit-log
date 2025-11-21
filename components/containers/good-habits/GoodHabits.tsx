@@ -1,31 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { habits } from "@/lib/test-data/habits";
-import type { Habits } from "@/types/habits";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -41,32 +15,46 @@ import {
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import * as React from "react";
+import { useEffect, useState } from "react";
+import { fetchHabits } from "@/actions/habits-actions";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import type { Habits } from "@/types/habits";
+import NewHabits from "../new-habits/NewHabits";
 
 export const columns: ColumnDef<Habits>[] = [
   {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
     accessorKey: "streak",
-    header: "連続記録",
+    header: "経過日数",
     cell: ({ row }) => <div>{row.getValue("streak")}日</div>,
   },
   {
@@ -89,6 +77,9 @@ export const columns: ColumnDef<Habits>[] = [
             <DropdownMenuItem>
               <Link href={`${row.getValue("date")}`}>編集</Link>
             </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href={`${row.getValue("date")}`}>失敗</Link>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -101,9 +92,19 @@ export default function GoodHabits() {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const [goodHabits, setGoodHabits] = useState<Habits[]>([]);
+
+  useEffect(() => {
+    async function loadGoodHabits() {
+      const data = await fetchHabits("good");
+      setGoodHabits(data);
+    }
+
+    loadGoodHabits();
+  }, []);
 
   const table = useReactTable({
-    data: habits,
+    data: goodHabits,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -125,13 +126,19 @@ export default function GoodHabits() {
     <Card className="h-full w-full">
       <CardHeader>
         <CardTitle>続けたい習慣</CardTitle>
-        <CardDescription>今日行った習慣にはチェックを入れましょう。</CardDescription>
-        <CardAction className="grid grid-cols-1 gap-2 md:grid-cols-2">
-          <Button>
-            <Link href="/">習慣を追加</Link>
-          </Button>
-          <Button>
-            <Link href="/">進捗確認</Link>
+        <CardDescription></CardDescription>
+        <CardAction>
+          <Button className="size-full">
+            <Dialog>
+              <DialogTrigger>習慣を追加</DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>新しい習慣</DialogTitle>
+                  <DialogDescription>新しい習慣を追加しましょう。</DialogDescription>
+                </DialogHeader>
+                <NewHabits />
+              </DialogContent>
+            </Dialog>
           </Button>
         </CardAction>
       </CardHeader>
@@ -167,7 +174,7 @@ export default function GoodHabits() {
               ) : (
                 <TableRow>
                   <TableCell colSpan={columns.length} className="h-24 text-center">
-                    No results.
+                    習慣がありません。
                   </TableCell>
                 </TableRow>
               )}

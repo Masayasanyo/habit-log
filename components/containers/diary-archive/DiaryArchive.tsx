@@ -6,7 +6,7 @@ import DiaryArchiveSearchDialog from "@/components/containers/diary-archive/Diar
 import DiaryArchiveTable from "@/components/containers/diary-archive/DiaryArchiveTable";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useDiaryArchiveTable } from "@/hooks/use-diary-archive-table";
-import { getDate, getDateOneMonthAgo } from "@/lib/date/date";
+import { getDateOneMonthAgo, getDateStr } from "@/lib/date/date";
 import { Diary } from "@/types/diaries";
 
 export function DiaryArchive() {
@@ -15,7 +15,7 @@ export function DiaryArchive() {
 
   useEffect(() => {
     async function loadDiaries() {
-      const today = getDate();
+      const today = getDateStr();
       const oneMonthAgo = getDateOneMonthAgo();
       const data = await fetchDiaries(oneMonthAgo, today);
       setDiaries(data);
