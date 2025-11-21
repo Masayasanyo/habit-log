@@ -6,7 +6,7 @@ import { getUserId } from "@/actions/user-actions";
 import { supabase } from "@/lib/supabase";
 import { Diary } from "@/types/diaries";
 
-export async function create(diary: Diary) {
+export async function createDiary(diary: Diary) {
   if (!diary.done && !diary.learned && !diary.challenge && !diary.other) {
     throw Error("日記に何も記入されていません。");
   }
