@@ -1,14 +1,19 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -34,6 +39,7 @@ import {
   VisibilityState,
 } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
+import Link from "next/link";
 import * as React from "react";
 
 export const columns: ColumnDef<Habits>[] = [
@@ -72,22 +78,17 @@ export const columns: ColumnDef<Habits>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const _payment = row.original;
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
               <MoreHorizontal />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>Copy payment ID</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link href={`${row.getValue("date")}`}>編集</Link>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -121,12 +122,18 @@ export default function GoodHabits() {
   });
 
   return (
-    <Card className="h-full">
+    <Card className="h-full w-full">
       <CardHeader>
         <CardTitle>続けたい習慣</CardTitle>
-        <CardDescription>
-          Make changes to your account here. Click save when you&apos;re done.
-        </CardDescription>
+        <CardDescription>今日行った習慣にはチェックを入れましょう。</CardDescription>
+        <CardAction className="grid grid-cols-1 gap-2 md:grid-cols-2">
+          <Button>
+            <Link href="/">習慣を追加</Link>
+          </Button>
+          <Button>
+            <Link href="/">進捗確認</Link>
+          </Button>
+        </CardAction>
       </CardHeader>
       <CardContent className="w-full">
         <div className="overflow-hidden rounded-md border">
