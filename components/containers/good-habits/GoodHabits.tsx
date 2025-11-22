@@ -2,22 +2,6 @@
 
 "use client";
 
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  SortingState,
-  useReactTable,
-  VisibilityState,
-} from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
-import Link from "next/link";
-import * as React from "react";
-import { useEffect, useState } from "react";
 import { fetchHabits } from "@/actions/habits-actions";
 import { Button } from "@/components/ui/button";
 import {
@@ -51,13 +35,33 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { Habits } from "@/types/habits";
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+  VisibilityState,
+} from "@tanstack/react-table";
+import { differenceInCalendarDays } from "date-fns";
+import { MoreHorizontal } from "lucide-react";
+import Link from "next/link";
+import * as React from "react";
+import { useEffect, useState } from "react";
 import NewHabits from "../new-habits/NewHabits";
 
 export const columns: ColumnDef<Habits>[] = [
   {
-    accessorKey: "streak",
+    accessorKey: "restart",
     header: "経過日数",
-    cell: ({ row }) => <div>{row.getValue("streak")}日</div>,
+    cell: ({ row }) => {
+      const streak = differenceInCalendarDays(new Date(), new Date(row.getValue("restart")));
+      return <div>{streak}日</div>;
+    },
   },
   {
     accessorKey: "title",

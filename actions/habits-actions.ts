@@ -1,9 +1,7 @@
-// TODO: fix resetHabit
-// TODO: fix fetchHabit
+// TODO: add restart column on supabase (still down) and test
 
 "use server";
 
-import { differenceInCalendarDays } from "date-fns";
 import { getUserId } from "@/actions/user-actions";
 import { HabitFormSchema } from "@/lib/schemas/habit-form";
 import { supabase } from "@/lib/supabase";
@@ -25,18 +23,17 @@ export async function createHabit(formData: FormData) {
 
   const { title, start } = validatedFields.data;
   const userId = await getUserId();
-  const streak = differenceInCalendarDays(new Date(), new Date(start));
 
-  const { error } = await supabase.from("habits").insert({
+  const { error: habitsTableError } = await supabase.from("habits").insert({
     user_id: userId,
     title: title,
     start: start,
+    restart: start,
     type: formData.get("type"),
-    streak: streak,
   });
 
-  if (error) {
-    console.error("Database error:", error.message);
+  if (habitsTableError) {
+    console.error("Database error:", habitsTableError.message);
     return {
       success: false,
       message: "習慣の新規登録に失敗しました。",
@@ -59,38 +56,23 @@ export async function fetchHabits(type: string) {
     console.error("Database Error:", error);
     return [];
   }
-  if (!data || data.length === 0) {
+  if (!data || data.length < 1) {
     return [];
   }
   return data || [];
 }
 
-export async function resetHabit(habitId: number, date: string) {
+export async function restartHabit(habitId: number, date: string) {
   const userId = await getUserId();
 
   const { error: updateError } = await supabase
     .from("habits")
-    .update({ streak: 0 })
+    .update({ restart: date })
     .eq("id", habitId)
     .eq("user_id", userId);
 
   if (updateError) {
     console.error("Database Error:", updateError);
-    return {
-      success: false,
-      message: "習慣のリセットに失敗しました。",
-    };
-  }
-
-  const { error: upsertError } = await supabase
-    .from("habit_records")
-    .upsert({ user_id: userId, habit_id: habitId, date: date, status: false })
-    .eq("habit_id", habitId)
-    .eq("date", date)
-    .eq("user_id", userId);
-
-  if (upsertError) {
-    console.error("Database Error:", upsertError);
     return {
       success: false,
       message: "習慣のリセットに失敗しました。",
