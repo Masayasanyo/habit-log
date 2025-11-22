@@ -1,4 +1,4 @@
-// TODO: add restart column on supabase (still down) and test
+// todo: add restart column on supabase (still down) and test
 
 "use server";
 
@@ -73,10 +73,17 @@ export async function restartHabit(habitId: number, date: string) {
 
   if (updateError) {
     console.error("Database Error:", updateError);
-    return {
-      success: false,
-      message: "習慣のリセットに失敗しました。",
-    };
+    throw new Error("習慣のリセットに失敗しました。");
   }
-  return { success: true };
+}
+
+export async function deleteHabit(habitId: number) {
+  const userId = await getUserId();
+
+  const { error } = await supabase.from("habits").delete().eq("user_id", userId).eq("id", habitId);
+
+  if (error) {
+    console.error("Database Error:", error);
+    throw new Error("習慣の削除に失敗しました。");
+  }
 }

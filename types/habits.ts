@@ -1,11 +1,11 @@
 export interface Habits {
-  id: number | null;
-  userId: number | null;
+  id: number;
+  userId: number;
   title: string;
   type: string;
   streak: number;
-  updatedAt: string | null;
-  createdAt: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 
 export interface NewHabit {

@@ -1,4 +1,4 @@
-// TODO: create habit records
+// todo: create habit records
 
 "use client";
 

@@ -1,6 +1,5 @@
-// TODO: components!!
-// TODO: create restart habit button
-// TODO: create update habit dialog or page
+// todo: components!!
+// todo: test restart habit button
 
 "use client";
 
@@ -18,10 +17,21 @@ import {
 } from "@tanstack/react-table";
 import { differenceInCalendarDays } from "date-fns";
 import { MoreHorizontal } from "lucide-react";
-import Link from "next/link";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { fetchHabits } from "@/actions/habits-actions";
+import { toast } from "sonner";
+import { deleteHabit, fetchHabits, restartHabit } from "@/actions/habits-actions";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -45,6 +55,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Table,
   TableBody,
@@ -53,6 +64,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getDateStr } from "@/lib/date/date";
 import type { Habits } from "@/types/habits";
 import NewHabits from "../new-habits/NewHabits";
 
@@ -74,6 +86,40 @@ export const columns: ColumnDef<Habits>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
+      const [pending, setPending] = useState<boolean>(false);
+      const habitId = row.original.id as number;
+
+      async function handleRestartHabit() {
+        const date = getDateStr();
+        try {
+          setPending(true);
+          await restartHabit(habitId, date);
+          toast.success("習慣のリセットに成功しました。");
+          location.reload();
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            toast.error(error.message);
+          }
+        } finally {
+          setPending(false);
+        }
+      }
+
+      async function handleDeleteHabit() {
+        try {
+          setPending(true);
+          await deleteHabit(habitId);
+          toast.success("習慣の削除に成功しました。");
+          location.reload();
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            toast.error(error.message);
+          }
+        } finally {
+          setPending(false);
+        }
+      }
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -82,12 +128,54 @@ export const columns: ColumnDef<Habits>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>
-              <Link href={`${row.getValue("date")}`}>編集</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Link href={`${row.getValue("date")}`}>リセット</Link>
-            </DropdownMenuItem>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>リセット</DropdownMenuItem>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>習慣をリセット</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    この習慣をリセットしますか？ この操作は元に戻せません。
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => {
+                      handleRestartHabit();
+                    }}
+                  >
+                    {pending && <Spinner />}
+                    OK
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>削除</DropdownMenuItem>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>習慣を削除</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    この習慣を削除しますか？ この操作は元に戻せません。
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => {
+                      handleDeleteHabit();
+                    }}
+                  >
+                    {pending && <Spinner />}
+                    OK
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </DropdownMenuContent>
         </DropdownMenu>
       );
