@@ -1,7 +1,26 @@
 // TODO: components!!
+// TODO: create restart habit button
+// TODO: create update habit dialog or page
 
 "use client";
 
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+  VisibilityState,
+} from "@tanstack/react-table";
+import { differenceInCalendarDays } from "date-fns";
+import { MoreHorizontal } from "lucide-react";
+import Link from "next/link";
+import * as React from "react";
+import { useEffect, useState } from "react";
 import { fetchHabits } from "@/actions/habits-actions";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,23 +54,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { Habits } from "@/types/habits";
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  SortingState,
-  useReactTable,
-  VisibilityState,
-} from "@tanstack/react-table";
-import { differenceInCalendarDays } from "date-fns";
-import { MoreHorizontal } from "lucide-react";
-import Link from "next/link";
-import * as React from "react";
-import { useEffect, useState } from "react";
 import NewHabits from "../new-habits/NewHabits";
 
 export const columns: ColumnDef<Habits>[] = [
@@ -84,7 +86,7 @@ export const columns: ColumnDef<Habits>[] = [
               <Link href={`${row.getValue("date")}`}>編集</Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href={`${row.getValue("date")}`}>失敗</Link>
+              <Link href={`${row.getValue("date")}`}>リセット</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
