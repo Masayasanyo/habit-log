@@ -1,7 +1,7 @@
 // todo: add skelton
 
 import type { Metadata } from "next";
-import GoodHabits from "@/components/containers/good-habits/GoodHabits";
+import GoodHabits from "@/components/containers/good-habits/good-habits";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const metadata: Metadata = {

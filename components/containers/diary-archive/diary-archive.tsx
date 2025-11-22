@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { fetchDiaries } from "@/actions/diaries-actions";
-import DiaryArchiveSearchDialog from "@/components/containers/diary-archive/DiaryArchiveSearchDialog";
-import DiaryArchiveTable from "@/components/containers/diary-archive/DiaryArchiveTable";
+import DiaryArchiveSearchDialog from "@/components/containers/diary-archive/diary-archive-search-dialog";
+import DiaryArchiveTable from "@/components/containers/diary-archive/diary-archive-table";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useDiaryArchiveTable } from "@/hooks/use-diary-archive-table";
 import { getDateOneMonthAgo, getDateStr } from "@/lib/date/date";
