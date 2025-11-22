@@ -1,10 +1,10 @@
+import type { Metadata } from "next";
+import { Suspense } from "react";
 import { fetchDiary } from "@/actions/diaries-actions";
 import { DiaryArchive } from "@/components/containers/diary-archive/diary-archive";
 import { DiaryForm } from "@/components/containers/diary-form/diary-form";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getDateStr } from "@/lib/date/date";
-import type { Metadata } from "next";
-import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "日記",

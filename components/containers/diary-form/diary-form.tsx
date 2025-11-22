@@ -1,7 +1,8 @@
-// todo: fix error handling
-
 "use client";
 
+import Link from "next/link";
+import { useState } from "react";
+import { Toaster, toast } from "sonner";
 import { createDiary } from "@/actions/diaries-actions";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,9 +19,6 @@ import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { getDateStr, getDateWithDayOfWeek } from "@/lib/date/date";
 import { Diary } from "@/types/diaries";
-import Link from "next/link";
-import { useState } from "react";
-import { Toaster, toast } from "sonner";
 
 export function DiaryForm({ data }: { data?: Diary }) {
   const [isPending, setIsPending] = useState(false);
