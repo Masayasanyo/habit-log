@@ -1,11 +1,5 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { toast } from "sonner";
 import { deleteDiary } from "@/actions/diaries-actions";
 import {
   AlertDialog,
@@ -30,6 +24,12 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { getDateStr, getDateWithDayOfWeek } from "@/lib/date/date";
 import { DiaryColumns } from "@/types/diaries";
+import { ColumnDef } from "@tanstack/react-table";
+import { MoreHorizontal } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export const columns: ColumnDef<DiaryColumns>[] = [
   {
@@ -64,18 +64,16 @@ export const columns: ColumnDef<DiaryColumns>[] = [
       const router = useRouter();
       const [isPending, setIsPending] = useState(false);
       async function handleDeleteDiary(date: string) {
-        try {
-          setIsPending(true);
-          await deleteDiary(date);
+        setIsPending(true);
+        const result = await deleteDiary(date);
+        if (result.success) {
           toast.success("日記の削除に成功しました。");
-          setIsPending(false);
           router.push(getDateStr());
-        } catch (error: unknown) {
-          if (error instanceof Error) {
-            toast.error(error.message);
-          }
-          setIsPending(false);
+          location.reload();
+        } else {
+          toast.error(result.message);
         }
+        setIsPending(false);
       }
 
       return (

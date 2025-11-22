@@ -1,8 +1,7 @@
+// todo: fix error handling
+
 "use client";
 
-import Link from "next/link";
-import { useState } from "react";
-import { Toaster, toast } from "sonner";
 import { createDiary } from "@/actions/diaries-actions";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,11 +18,14 @@ import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { getDateStr, getDateWithDayOfWeek } from "@/lib/date/date";
 import { Diary } from "@/types/diaries";
+import Link from "next/link";
+import { useState } from "react";
+import { Toaster, toast } from "sonner";
 
-export function DiaryForm(props: { data?: Diary }) {
+export function DiaryForm({ data }: { data?: Diary }) {
   const [isPending, setIsPending] = useState(false);
   const [diary, setDiary] = useState<Diary>(
-    props.data || {
+    data || {
       id: null,
       userId: null,
       done: "",
@@ -36,17 +38,14 @@ export function DiaryForm(props: { data?: Diary }) {
   );
 
   async function saveDiary() {
-    try {
-      setIsPending(true);
-      await createDiary(diary);
-      setIsPending(false);
-      toast.success("日記が保存されました！");
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
-      setIsPending(false);
+    setIsPending(true);
+    const result = await createDiary(diary);
+    if (result.success) {
+      location.reload();
+    } else {
+      toast.error(result.message);
     }
+    setIsPending(false);
   }
 
   return (
