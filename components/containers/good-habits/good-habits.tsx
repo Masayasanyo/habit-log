@@ -1,8 +1,5 @@
-// todo: test restart habit button
-
 "use client";
 
-import { useEffect, useState } from "react";
 import { fetchHabits } from "@/actions/habits-actions";
 import {
   Card,
@@ -14,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import useGoodHabitsTable from "@/hooks/use-good-habits-table";
 import type { Habits } from "@/types/habits";
+import { useEffect, useState } from "react";
 import GoodHabitsTable from "./good-habits-table";
 import NewHabits from "./new-habits";
 

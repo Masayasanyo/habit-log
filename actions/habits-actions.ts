@@ -1,5 +1,3 @@
-// todo: add restart column on supabase (still down) and test
-
 "use server";
 
 import { getUserId } from "@/actions/user-actions";
@@ -50,7 +48,7 @@ export async function fetchHabits(type: string) {
     .select()
     .eq("user_id", userId)
     .eq("type", type)
-    .order("created_at", { ascending: false });
+    .order("restart", { ascending: false });
 
   if (error) {
     console.error("Database Error:", error);

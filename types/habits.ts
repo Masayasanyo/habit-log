@@ -3,7 +3,6 @@ export interface Habits {
   userId: number;
   title: string;
   type: string;
-  streak: number;
   updatedAt: string;
   createdAt: string;
 }
