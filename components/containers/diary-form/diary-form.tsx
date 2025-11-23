@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Toaster, toast } from "sonner";
-import { create } from "@/actions/diaries-actions";
+import { createDiary } from "@/actions/diaries-actions";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,40 +17,37 @@ import {
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
-import { getDate, getDateWithDayOfWeek } from "@/lib/date/date";
+import { getDateStr, getDateWithDayOfWeek } from "@/lib/date/date";
 import { Diary } from "@/types/diaries";
 
-export function DiaryForm(props: { data?: Diary }) {
+export function DiaryForm({ data }: { data?: Diary }) {
   const [isPending, setIsPending] = useState(false);
   const [diary, setDiary] = useState<Diary>(
-    props.data || {
+    data || {
       id: null,
       userId: null,
       done: "",
       learned: "",
       challenge: "",
       other: "",
-      date: getDate(),
+      date: getDateStr(),
       createdAt: "",
     },
   );
 
   async function saveDiary() {
-    try {
-      setIsPending(true);
-      await create(diary);
-      setIsPending(false);
-      toast.success("日記が保存されました！");
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
-      setIsPending(false);
+    setIsPending(true);
+    const result = await createDiary(diary);
+    if (result.success) {
+      location.reload();
+    } else {
+      toast.error(result.message);
     }
+    setIsPending(false);
   }
 
   return (
-    <Card className="">
+    <Card>
       <CardHeader>
         <CardTitle>{getDateWithDayOfWeek(diary.date)}</CardTitle>
         <CardDescription>
@@ -58,7 +55,7 @@ export function DiaryForm(props: { data?: Diary }) {
         </CardDescription>
         <CardAction>
           <Button variant="outline">
-            <Link href={getDate()}>今日の日記</Link>
+            <Link href={getDateStr()}>今日の日記</Link>
           </Button>
         </CardAction>
       </CardHeader>
@@ -114,8 +111,8 @@ export function DiaryForm(props: { data?: Diary }) {
           </div>
         </form>
       </CardContent>
-      <CardFooter className="flex-col gap-2">
-        <Button type="submit" form="diary-form" aria-disabled={isPending} className="w-full">
+      <CardFooter>
+        <Button type="submit" form="diary-form" aria-disabled={isPending} className="flex gap-2">
           {isPending && <Spinner />}
           保存
         </Button>

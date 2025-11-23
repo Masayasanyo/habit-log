@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import RegisterForm from "@/components/containers/register/form";
+import RegisterForm from "@/components/containers/register/register-form";
 
 export default function Page() {
   return (
