@@ -1,5 +1,3 @@
-import { columns } from "@/components/containers/habits/columns";
-import { Habits } from "@/types/habits";
 import {
   ColumnFiltersState,
   getCoreRowModel,
@@ -11,6 +9,8 @@ import {
   VisibilityState,
 } from "@tanstack/react-table";
 import { useState } from "react";
+import { columns } from "@/components/containers/habits/columns";
+import { Habits } from "@/types/habits";
 
 export default function useHabitsTable(habits: Habits[]) {
   const [sorting, setSorting] = useState<SortingState>([]);

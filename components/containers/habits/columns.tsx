@@ -1,5 +1,10 @@
 "use client";
 
+import { ColumnDef } from "@tanstack/react-table";
+import { differenceInCalendarDays } from "date-fns";
+import { MoreHorizontal } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 import { deleteHabit, restartHabit } from "@/actions/habits-actions";
 import {
   AlertDialog,
@@ -22,11 +27,6 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { getDateStr, getDateWithDayOfWeek } from "@/lib/date/date";
 import type { Habits } from "@/types/habits";
-import { ColumnDef } from "@tanstack/react-table";
-import { differenceInCalendarDays } from "date-fns";
-import { MoreHorizontal } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
 
 export const columns: ColumnDef<Habits>[] = [
   {

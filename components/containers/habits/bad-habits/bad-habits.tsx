@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { fetchHabits } from "@/actions/habits-actions";
 import HabitsTable from "@/components/containers/habits/habits-table";
 import NewHabits from "@/components/containers/habits/new-habits";
@@ -13,7 +14,6 @@ import {
 } from "@/components/ui/card";
 import useHabitsTable from "@/hooks/use-habits-table";
 import type { Habits } from "@/types/habits";
-import { useEffect, useState } from "react";
 
 export default function BadHabits() {
   const [baddHabits, setBadHabits] = useState<Habits[]>([]);
