@@ -1,5 +1,4 @@
-import type { Table as TableType } from "@tanstack/react-table";
-import { flexRender } from "@tanstack/react-table";
+import { columns } from "@/components/containers/habits/columns";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -10,9 +9,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Habits } from "@/types/habits";
-import { columns } from "./columns";
+import type { Table as TableType } from "@tanstack/react-table";
+import { flexRender } from "@tanstack/react-table";
 
-export default function GoodHabitsTable({ table }: { table: TableType<Habits> }) {
+export default function HabitsTable({ table }: { table: TableType<Habits> }) {
   return (
     <div>
       <div className="overflow-hidden rounded-md border">

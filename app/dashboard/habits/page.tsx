@@ -1,8 +1,7 @@
-// todo: add skelton
-
-import type { Metadata } from "next";
-import GoodHabits from "@/components/containers/good-habits/good-habits";
+import BadHabits from "@/components/containers/habits/bad-habits/bad-habits";
+import GoodHabits from "@/components/containers/habits/good-habits/good-habits";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "習慣",
@@ -19,7 +18,9 @@ export default function Page() {
         <TabsContent value="good">
           <GoodHabits />
         </TabsContent>
-        <TabsContent value="bad"></TabsContent>
+        <TabsContent value="bad">
+          <BadHabits />
+        </TabsContent>
       </Tabs>
     </div>
   );

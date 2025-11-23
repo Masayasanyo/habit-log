@@ -1,9 +1,5 @@
 "use client";
 
-import { ja } from "date-fns/locale";
-import { ChevronDownIcon } from "lucide-react";
-import { useState } from "react";
-import { Toaster, toast } from "sonner";
 import { createHabit } from "@/actions/habits-actions";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -28,6 +24,10 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { formatDateToYYYYMMDD, getDateWithDayOfWeek } from "@/lib/date/date";
 import { HabitFormState } from "@/types/habits";
+import { ja } from "date-fns/locale";
+import { ChevronDownIcon } from "lucide-react";
+import { useState } from "react";
+import { Toaster, toast } from "sonner";
 
 export default function NewHabits() {
   const today = new Date();
@@ -37,7 +37,7 @@ export default function NewHabits() {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date>(today);
   const [dateStr, setDateStr] = useState<string>(dateWithDayOfWeek);
-  const [pending, _setPending] = useState<boolean>(false);
+  const [pending, setPending] = useState<boolean>(false);
   const initialState: HabitFormState = { success: null, message: null, errors: {} };
   const [state, setState] = useState<HabitFormState>(initialState);
 
@@ -51,6 +51,7 @@ export default function NewHabits() {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setPending(true);
     setState(initialState);
     const formData = new FormData(e.currentTarget);
     const result = await createHabit(formData);
@@ -60,6 +61,7 @@ export default function NewHabits() {
       setState(result);
       toast.error(result.message);
     }
+    setPending(false);
   }
 
   return (
