@@ -28,7 +28,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Spinner } from "@/components/ui/spinner";
-import { getDate, getDateWithDayOfWeek } from "@/lib/date/date";
+import { getDateStr, getDateWithDayOfWeek } from "@/lib/date/date";
 import { DiaryColumns } from "@/types/diaries";
 
 export const columns: ColumnDef<DiaryColumns>[] = [
@@ -64,18 +64,16 @@ export const columns: ColumnDef<DiaryColumns>[] = [
       const router = useRouter();
       const [isPending, setIsPending] = useState(false);
       async function handleDeleteDiary(date: string) {
-        try {
-          setIsPending(true);
-          await deleteDiary(date);
+        setIsPending(true);
+        const result = await deleteDiary(date);
+        if (result.success) {
           toast.success("日記の削除に成功しました。");
-          setIsPending(false);
-          router.push(getDate());
-        } catch (error: unknown) {
-          if (error instanceof Error) {
-            toast.error(error.message);
-          }
-          setIsPending(false);
+          router.push(getDateStr());
+          location.reload();
+        } else {
+          toast.error(result.message);
         }
+        setIsPending(false);
       }
 
       return (

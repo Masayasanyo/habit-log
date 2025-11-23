@@ -28,8 +28,8 @@ import {
 import { Label } from "@/components/ui/label";
 import {
   formatDateToYYYYMMDD,
-  getDate,
   getDateOneMonthAgo,
+  getDateStr,
   getDateWithDayOfWeek,
 } from "@/lib/date/date";
 import { diaryColumns } from "@/lib/diaries/diary-columns";
@@ -45,7 +45,7 @@ export default function DiaryArchiveSearchDialog({
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [dateRangeStr, setDateRangeStr] = useState<DateRangeStr>({
     from: getDateOneMonthAgo(),
-    to: getDate(),
+    to: getDateStr(),
   });
   const [selectedColumn, setSelectedColumn] = useState<string>("したこと");
 
